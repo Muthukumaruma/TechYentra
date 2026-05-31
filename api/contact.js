@@ -1,12 +1,35 @@
 import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+// reCAPTCHA Enterprise — needs Google Cloud API key + project ID
+const RECAPTCHA_API_KEY    = process.env.RECAPTCHA_API_KEY;      // Google Cloud API key
+const RECAPTCHA_PROJECT_ID = process.env.RECAPTCHA_PROJECT_ID;   // GCP project ID
+const RECAPTCHA_SITE_KEY   = '6Le2ogUtAAAAACHvmBZxPp72hah9Chsp8qvWu0r6';
+const RECAPTCHA_MIN_SCORE  = 0.5;
 
 const TO_EMAIL = 'info@techyenthra.com';
 const FROM_NAME = 'TechYenthra Website';
 // Use Resend's shared domain for testing; swap to 'noreply@techyenthra.com'
 // once you verify your domain in the Resend dashboard.
 const FROM_EMAIL = 'onboarding@resend.dev';
+
+async function verifyRecaptcha(token) {
+  // Enterprise uses a different REST endpoint than standard v3
+  const url = `https://recaptchaenterprise.googleapis.com/v1/projects/${RECAPTCHA_PROJECT_ID}/assessments?key=${RECAPTCHA_API_KEY}`;
+  const r = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      event: {
+        token,
+        siteKey: RECAPTCHA_SITE_KEY,
+        expectedAction: 'contact_form',
+      },
+    }),
+  });
+  return r.json();
+  // Returns: { tokenProperties: { valid, action }, riskAnalysis: { score, reasons } }
+}
 
 export default async function handler(req, res) {
   // CORS for local dev
@@ -17,8 +40,27 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { name, email, company, phone, service, budget, message } = req.body || {};
+  const { name, email, company, phone, service, budget, message, captchaToken } = req.body || {};
 
+  // ── reCAPTCHA verification ──────────────────────────────────────────────
+  if (!captchaToken) {
+    return res.status(400).json({ error: 'Missing security token. Please refresh and try again.' });
+  }
+
+  try {
+    const captcha = await verifyRecaptcha(captchaToken);
+    const valid = captcha?.tokenProperties?.valid;
+    const score = captcha?.riskAnalysis?.score ?? 0;
+    if (!valid || score < RECAPTCHA_MIN_SCORE) {
+      console.warn('reCAPTCHA Enterprise failed:', JSON.stringify(captcha));
+      return res.status(403).json({ error: 'Security check failed. Please try again or call us directly.' });
+    }
+  } catch (captchaErr) {
+    console.error('reCAPTCHA verify error:', captchaErr);
+    return res.status(500).json({ error: 'Could not verify security token.' });
+  }
+
+  // ── Field validation ────────────────────────────────────────────────────
   if (!name || !email || !message) {
     return res.status(400).json({ error: 'Name, email and message are required.' });
   }

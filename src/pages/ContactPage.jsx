@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
-import { Phone, Mail, Send, CheckCircle2, MessageSquare } from 'lucide-react';
+import { useState, useCallback } from 'react';
+import { Phone, Mail, Send, CheckCircle2, MessageSquare, ShieldCheck } from 'lucide-react';
 import SEO from '../components/SEO';
 import SectionHeader from '../components/ui/SectionHeader';
 import Button from '../components/ui/Button';
@@ -13,6 +13,24 @@ const INITIAL_FORM = {
   name: '', email: '', company: '', phone: '',
   service: '', budget: '', message: '', consent: false,
 };
+
+const SITE_KEY = '6Le2ogUtAAAAACHvmBZxPp72hah9Chsp8qvWu0r6';
+
+async function getEnterpriseToken(action) {
+  return new Promise((resolve, reject) => {
+    if (!window.grecaptcha?.enterprise) {
+      return reject(new Error('reCAPTCHA not loaded'));
+    }
+    window.grecaptcha.enterprise.ready(async () => {
+      try {
+        const token = await window.grecaptcha.enterprise.execute(SITE_KEY, { action });
+        resolve(token);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  });
+}
 
 export default function ContactPage() {
   const [form, setForm] = useState(INITIAL_FORM);
@@ -34,16 +52,18 @@ export default function ContactPage() {
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length) { setErrors(errs); return; }
+
     setLoading(true);
     try {
+      const captchaToken = await getEnterpriseToken('contact_form');
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, captchaToken }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Something went wrong');
@@ -53,7 +73,7 @@ export default function ContactPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [form]);
 
   return (
     <div className="page-wrapper">
@@ -285,6 +305,14 @@ export default function ContactPage() {
                         {errors.submit}
                       </p>
                     )}
+
+                    {/* reCAPTCHA badge */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', justifyContent: 'center', marginTop: '14px' }}>
+                      <ShieldCheck size={13} style={{ color: 'var(--text-light)' }} />
+                      <p style={{ fontSize: '11px', color: 'var(--text-light)', margin: 0 }}>
+                        Protected by reCAPTCHA · <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-light)', textDecoration: 'underline' }}>Privacy</a> &amp; <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-light)', textDecoration: 'underline' }}>Terms</a>
+                      </p>
+                    </div>
                   </form>
                 </div>
               )}
