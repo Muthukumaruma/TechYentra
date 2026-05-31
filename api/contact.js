@@ -7,10 +7,8 @@ const RECAPTCHA_PROJECT_ID = process.env.RECAPTCHA_PROJECT_ID;   // GCP project 
 const RECAPTCHA_SITE_KEY   = '6Le2ogUtAAAAACHvmBZxPp72hah9Chsp8qvWu0r6';
 const RECAPTCHA_MIN_SCORE  = 0.5;
 
-const TO_EMAIL = 'info@techyenthra.com';
+const TO_EMAIL = process.env.NOTIFY_EMAIL || 'info@techyenthra.com';
 const FROM_NAME = 'TechYenthra Website';
-// Use Resend's shared domain for testing; swap to 'noreply@techyenthra.com'
-// once you verify your domain in the Resend dashboard.
 const FROM_EMAIL = 'onboarding@resend.dev';
 
 async function verifyRecaptcha(token) {
