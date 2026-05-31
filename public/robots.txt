@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.techyenthra.com/sitemap.xml
+
+# Block build artefacts
+Disallow: /assets/*.map

@@ -4,6 +4,7 @@ import {
   Layers, Palette, GitBranch, Cpu, Bot, Database, ArrowRight,
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import SEO from '../components/SEO';
 import SectionHeader from '../components/ui/SectionHeader';
 import Badge from '../components/ui/Badge';
 import Button from '../components/ui/Button';
@@ -24,6 +25,12 @@ const ICON_COLORS = [
 export default function ServicesPage() {
   return (
     <div className="page-wrapper">
+      <SEO
+        title="Our Services – AI, Web, Mobile, Cloud, OTT & More"
+        path="/services"
+        description="Explore TechYenthra's full-spectrum IT services: AI & Machine Learning, web development, mobile apps, cloud solutions, OTT platforms, online travel agent systems, DevOps, cybersecurity and more."
+        keywords="AI development services India, web development services, mobile app development India, OTT platform development, online travel agent software, cloud solutions India, DevOps services, enterprise software development"
+      />
       {/* Hero */}
       <section className="page-hero" style={{ padding: '100px 0 80px', position: 'relative', overflow: 'hidden' }}>
         <ParticleField count={45} dark />

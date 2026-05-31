@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { CheckCircle2, ArrowRight, ExternalLink } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
+import SEO from '../components/SEO';
 import SectionHeader from '../components/ui/SectionHeader';
 import Badge from '../components/ui/Badge';
 import Button from '../components/ui/Button';
@@ -19,6 +20,12 @@ export default function ProjectsPage() {
 
   return (
     <div className="page-wrapper">
+      <SEO
+        title="Our Projects – CodeSense, Jothisham, OTT Platform & More"
+        path="/projects"
+        description="Portfolio of TechYenthra Technologies: CodeSense AI code reviewer, Jothisham astrology platform, OTT streaming platform, Online Travel Agent system, expense tracker, ERP and more."
+        keywords="software projects portfolio India, AI code review tool, astrology platform development, OTT platform India, online travel agent software, React projects, enterprise software portfolio"
+      />
       {/* Hero */}
       <section className="page-hero" style={{ padding: '100px 0 80px', position: 'relative', overflow: 'hidden' }}>
         <ParticleField count={45} dark />

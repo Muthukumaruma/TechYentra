@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
 import { ArrowRight, CheckCircle2, Zap, Shield, Globe, Brain, Cpu, BarChart3 } from 'lucide-react';
 import ParticleField from '../components/ParticleField';
+import SEO from '../components/SEO';
 import SectionHeader from '../components/ui/SectionHeader';
 import AnimatedCounter from '../components/ui/AnimatedCounter';
 import Card from '../components/ui/Card';
@@ -24,9 +25,37 @@ const techBadges = [
   'GPT-4', 'Kubernetes', 'TypeScript', 'Next.js',
 ];
 
+const HOME_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: 'TechYenthra Technologies Private Limited',
+  url: 'https://www.techyenthra.com',
+  telephone: '+918105177337',
+  email: 'info@techyenthra.com',
+  address: { '@type': 'PostalAddress', addressLocality: 'Bengaluru', addressRegion: 'Karnataka', addressCountry: 'IN' },
+  serviceType: ['AI Development', 'Web Development', 'Mobile App Development', 'Cloud Solutions', 'OTT Platform Development', 'Online Travel Agent Software'],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'IT Services',
+    itemListElement: [
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'AI & Machine Learning Solutions' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Web Application Development' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Mobile App Development' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'OTT Streaming Platform Development' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Online Travel Agent Platform' } },
+    ],
+  },
+};
+
 export default function HomePage() {
   return (
     <div className="page-wrapper" style={{ paddingTop: 0 }}>
+      <SEO
+        path="/"
+        description="TechYenthra Technologies – India's trusted software development company. We build AI platforms, web & mobile apps, OTT streaming, travel tech, and enterprise solutions. 50+ projects delivered."
+        keywords="software development company India, AI development Bengaluru, web development company India, mobile app development, OTT platform development, online travel agent software India"
+        schema={HOME_SCHEMA}
+      />
       {/* ─── Hero ─── */}
       <section
         style={{

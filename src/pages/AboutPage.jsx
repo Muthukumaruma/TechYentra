@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Target, Eye, Users, Award, CheckCircle2, ArrowRight } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import SEO from '../components/SEO';
 import SectionHeader from '../components/ui/SectionHeader';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
@@ -17,6 +18,12 @@ const fadeUp = (delay = 0) => ({
 export default function AboutPage() {
   return (
     <div className="page-wrapper">
+      <SEO
+        title="About Us – Our Mission, Vision & Team"
+        path="/about"
+        description="Learn about TechYenthra Technologies – our mission, vision, core values, and the passionate team of engineers and AI specialists building world-class digital solutions from India."
+        keywords="about TechYenthra Technologies, software company India, IT company Bengaluru, tech company mission vision, software development team India"
+      />
       {/* Page Hero */}
       <section
         className="page-hero"

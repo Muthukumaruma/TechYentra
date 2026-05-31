@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { Phone, Mail, Send, CheckCircle2, MessageSquare } from 'lucide-react';
+import SEO from '../components/SEO';
 import SectionHeader from '../components/ui/SectionHeader';
 import Button from '../components/ui/Button';
 import ParticleField from '../components/ParticleField';
@@ -45,6 +46,12 @@ export default function ContactPage() {
 
   return (
     <div className="page-wrapper">
+      <SEO
+        title="Contact Us – Get a Free Project Consultation"
+        path="/contact"
+        description="Get in touch with TechYenthra Technologies. Call +91 81051 77337 or fill in our contact form to discuss your software project. We respond within 24 hours."
+        keywords="contact TechYenthra, hire software developers India, software development consultation, get project quote India, IT company contact Bengaluru"
+      />
       {/* Hero */}
       <section className="page-hero" style={{ padding: '100px 0 80px', position: 'relative', overflow: 'hidden' }}>
         <ParticleField count={40} dark />
