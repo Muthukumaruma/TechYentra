@@ -39,9 +39,20 @@ export default function ContactPage() {
     const errs = validate();
     if (Object.keys(errs).length) { setErrors(errs); return; }
     setLoading(true);
-    await new Promise(r => setTimeout(r, 1200));
-    setLoading(false);
-    setSubmitted(true);
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Something went wrong');
+      setSubmitted(true);
+    } catch (err) {
+      setErrors({ submit: err.message || 'Failed to send. Please call us directly.' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -268,6 +279,12 @@ export default function ContactPage() {
                     >
                       {loading ? 'Sending...' : 'Send Message'}
                     </Button>
+
+                    {errors.submit && (
+                      <p style={{ marginTop: '12px', padding: '10px 14px', borderRadius: '8px', background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.15)', color: '#dc2626', fontSize: '13px', textAlign: 'center' }}>
+                        {errors.submit}
+                      </p>
+                    )}
                   </form>
                 </div>
               )}
