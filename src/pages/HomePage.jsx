@@ -20,11 +20,6 @@ const fadeUp = {
 
 const featuredServices = content.services.slice(0, 6);
 
-const techBadges = [
-  'React.js', 'Node.js', 'Python AI', 'AWS Cloud',
-  'GPT-4', 'Kubernetes', 'TypeScript', 'Next.js',
-];
-
 const HOME_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
@@ -177,30 +172,6 @@ export default function HomePage() {
               </NavLink>
             </motion.div>
 
-            {/* Tech badges */}
-            <motion.div
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: 0.55 }}
-              style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', marginTop: '48px' }}
-            >
-              {techBadges.map((t, i) => (
-                <motion.span
-                  key={t}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.6 + i * 0.07 }}
-                  style={{
-                    padding: '6px 14px', borderRadius: '100px',
-                    background: 'rgba(255,255,255,0.06)',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    color: 'rgba(255,255,255,0.65)',
-                    fontSize: '12px', fontWeight: 500,
-                  }}
-                >
-                  {t}
-                </motion.span>
-              ))}
-            </motion.div>
           </div>
         </div>
 
