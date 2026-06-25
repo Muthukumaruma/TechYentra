@@ -1,9 +1,19 @@
 import { NavLink } from 'react-router-dom';
-import { Phone, Mail, Globe, Share2, Code2 } from 'lucide-react';
+import { Phone, Mail, Share2, Code2 } from 'lucide-react';
 import content from '../../content.json';
 
 const serviceLinks = content.services.slice(0, 6).map(s => s.title);
 const quickLinks = content.nav;
+
+const LINKEDIN_URL = 'https://www.linkedin.com/company/techyenthra/';
+
+function LinkedInIcon({ size = 16 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45z" />
+    </svg>
+  );
+}
 
 export default function Footer() {
   return (
@@ -36,13 +46,14 @@ export default function Footer() {
             </p>
             <div style={{ display: 'flex', gap: '12px' }}>
               {[
-                { Icon: Globe, href: '#' },
+                { Icon: LinkedInIcon, href: LINKEDIN_URL, external: true },
                 { Icon: Share2, href: '#' },
                 { Icon: Code2, href: '#' },
-              ].map(({ Icon, href }, i) => (
+              ].map(({ Icon, href, external }, i) => (
                 <a
                   key={i}
                   href={href}
+                  {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                   style={{
                     width: '36px', height: '36px',
                     borderRadius: '8px',
