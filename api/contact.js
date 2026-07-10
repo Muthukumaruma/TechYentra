@@ -8,8 +8,8 @@ const RECAPTCHA_SITE_KEY   = '6Le2ogUtAAAAACHvmBZxPp72hah9Chsp8qvWu0r6';
 const RECAPTCHA_MIN_SCORE  = 0.5;
 
 const TO_EMAIL = process.env.NOTIFY_EMAIL || 'info@techyenthra.com';
-const FROM_NAME = 'TechYenthra Website';
-const FROM_EMAIL = 'onboarding@resend.dev';
+const FROM_NAME = 'TechYenthra Technologies';
+const FROM_EMAIL = 'noreply@techyenthra.com';
 
 async function verifyRecaptcha(token) {
   // Enterprise uses a different REST endpoint than standard v3
