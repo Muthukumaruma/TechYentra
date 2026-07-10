@@ -30,7 +30,7 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 
 body {
   font-family: 'Inter', sans-serif;
@@ -149,4 +149,13 @@ input, textarea, select { font-family: inherit; }
 }
 @media (max-width: 480px) {
   .container { padding: 0 16px; }
+  .section { padding: 56px 0; }
+}
+
+/* Mobile: prevent any element from breaking page width */
+@media (max-width: 640px) {
+  .page-wrapper { overflow-x: hidden; }
+
+  /* Trust strip separators hidden on mobile */
+  .trust-sep { display: none !important; }
 }

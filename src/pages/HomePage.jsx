@@ -229,7 +229,7 @@ export default function HomePage() {
               </div>
             </a>
 
-            <div style={{ width: '1px', height: '30px', background: 'var(--border)' }} />
+            <div className="trust-sep" style={{ width: '1px', height: '30px', background: 'var(--border)' }} />
 
             {/* Udyam MSME Badge */}
             <a href={content.company.udyamCertificate} target="_blank" rel="noopener noreferrer" title="Udyam Registration Certificate"
@@ -244,7 +244,7 @@ export default function HomePage() {
               </div>
             </a>
 
-            <div style={{ width: '1px', height: '30px', background: 'var(--border)' }} />
+            <div className="trust-sep" style={{ width: '1px', height: '30px', background: 'var(--border)' }} />
 
             {/* GeM Badge */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(5,150,105,0.06)', border: '1px dashed rgba(5,150,105,0.35)', borderRadius: '10px', padding: '9px 16px' }}>
@@ -270,7 +270,7 @@ export default function HomePage() {
           />
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(320px, 100%), 1fr))',
             gap: '20px',
             marginBottom: '40px',
           }}>
@@ -293,7 +293,7 @@ export default function HomePage() {
         <div className="container">
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(400px, 100%), 1fr))',
             gap: '60px', alignItems: 'center',
           }}>
             <motion.div
@@ -336,7 +336,7 @@ export default function HomePage() {
             </motion.div>
 
             {/* Right: values grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(180px, 100%), 1fr))', gap: '16px' }}>
               {content.values.map((v, i) => (
                 <Card key={v.title} delay={i * 0.1} padding="24px">
                   <div style={{
@@ -366,7 +366,7 @@ export default function HomePage() {
           />
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(340px, 100%), 1fr))',
             gap: '24px',
           }}>
             {content.products.map((product, i) => (
@@ -436,7 +436,7 @@ export default function HomePage() {
           />
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(340px, 100%), 1fr))',
             gap: '20px',
             marginBottom: '40px',
           }}>
