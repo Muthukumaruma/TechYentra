@@ -42,7 +42,7 @@ export default function Footer() {
                 alt={content.company.legalName}
                 style={{ height: '44px', width: 'auto' }}
               />
-              <sup style={{ fontSize: '11px', fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginLeft: '3px', marginTop: '4px' }}>™</sup>
+              <span style={{ fontSize: '13px', fontWeight: 900, color: '#ffffff', marginLeft: '3px', marginTop: '3px', lineHeight: 1 }}>™</span>
             </div>
             <p style={{ fontSize: '14px', lineHeight: 1.75, maxWidth: '280px', marginBottom: '24px' }}>
               {content.footer.description}

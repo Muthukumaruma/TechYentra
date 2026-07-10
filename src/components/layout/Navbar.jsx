@@ -42,17 +42,17 @@ export default function Navbar() {
       >
         <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '72px' }}>
           {/* Logo */}
-          <NavLink to="/" style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+          <NavLink to="/" style={{ display: 'flex', alignItems: 'flex-start', position: 'relative' }}>
             <img
               src={forceDark ? content.company.logoLight : content.company.logoDark}
               alt={content.company.legalName}
               style={{ height: '40px', width: 'auto', objectFit: 'contain' }}
             />
-            <sup style={{
-              fontSize: '10px', fontWeight: 700, letterSpacing: '0.02em',
-              color: forceDark ? 'rgba(255,255,255,0.6)' : 'var(--text-muted)',
-              marginLeft: '2px', marginTop: '-16px',
-            }}>™</sup>
+            <span style={{
+              fontSize: '11px', fontWeight: 900, lineHeight: 1,
+              color: forceDark ? '#ffffff' : '#1d4ed8',
+              marginLeft: '3px', marginTop: '2px', flexShrink: 0,
+            }}>™</span>
           </NavLink>
 
           {/* Desktop nav */}
