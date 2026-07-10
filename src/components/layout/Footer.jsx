@@ -149,34 +149,43 @@ export default function Footer() {
                 <Mail size={15} />
                 {content.company.email}
               </a>
+            </div>
+          </div>
+
+          {/* Certifications */}
+          <div>
+            <h4 style={{ color: '#fff', fontSize: '14px', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '20px' }}>
+              Certifications
+            </h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <a
                 href={content.company.companyProfile}
                 download="TechYenthra-Company-Profile.pdf"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 600, color: '#06b6d4', marginTop: '8px', transition: 'opacity 0.2s' }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 600, color: '#06b6d4', transition: 'opacity 0.2s' }}
                 onMouseEnter={e => e.currentTarget.style.opacity = '0.75'}
                 onMouseLeave={e => e.currentTarget.style.opacity = '1'}
               >
-                <Download size={14} /> Download Company Profile
+                <Download size={14} /> Company Profile
               </a>
               <a
                 href={content.company.dpiitCertificate}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 600, color: '#FF9900', marginTop: '6px', transition: 'opacity 0.2s' }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 600, color: '#FF9900', transition: 'opacity 0.2s' }}
                 onMouseEnter={e => e.currentTarget.style.opacity = '0.75'}
                 onMouseLeave={e => e.currentTarget.style.opacity = '1'}
               >
-                🇮🇳 DPIIT Recognised Startup
+                🇮🇳 DPIIT Recognised
               </a>
               <a
                 href={content.company.udyamCertificate}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 600, color: '#1d4ed8', marginTop: '6px', transition: 'opacity 0.2s' }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 600, color: '#1d4ed8', transition: 'opacity 0.2s' }}
                 onMouseEnter={e => e.currentTarget.style.opacity = '0.75'}
                 onMouseLeave={e => e.currentTarget.style.opacity = '1'}
               >
-                🏭 Udyam Registered MSME
+                🏭 Udyam MSME
               </a>
             </div>
           </div>
