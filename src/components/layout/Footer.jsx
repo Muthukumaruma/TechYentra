@@ -36,11 +36,14 @@ export default function Footer() {
         >
           {/* Brand */}
           <div style={{ gridColumn: 'span 2' }}>
-            <img
-              src={content.company.logoLight}
-              alt={content.company.legalName}
-              style={{ height: '44px', width: 'auto', marginBottom: '20px' }}
-            />
+            <div style={{ display: 'inline-flex', alignItems: 'flex-start', marginBottom: '20px' }}>
+              <img
+                src={content.company.logoLight}
+                alt={content.company.legalName}
+                style={{ height: '44px', width: 'auto' }}
+              />
+              <sup style={{ fontSize: '11px', fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginLeft: '3px', marginTop: '4px' }}>™</sup>
+            </div>
             <p style={{ fontSize: '14px', lineHeight: 1.75, maxWidth: '280px', marginBottom: '24px' }}>
               {content.footer.description}
             </p>
@@ -164,6 +167,16 @@ export default function Footer() {
                 onMouseLeave={e => e.currentTarget.style.opacity = '1'}
               >
                 🇮🇳 DPIIT Recognised Startup
+              </a>
+              <a
+                href={content.company.udyamCertificate}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 600, color: '#1d4ed8', marginTop: '6px', transition: 'opacity 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.opacity = '0.75'}
+                onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+              >
+                🏭 Udyam Registered MSME
               </a>
             </div>
           </div>

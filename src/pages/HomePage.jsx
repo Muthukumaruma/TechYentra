@@ -283,6 +283,31 @@ export default function HomePage() {
 
             <div style={{ width: '1px', height: '32px', background: 'var(--border)' }} />
 
+            {/* Udyam Badge */}
+            <a
+              href={content.company.udyamCertificate}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="View Udyam Registration Certificate"
+              style={{
+                display: 'flex', alignItems: 'center', gap: '10px',
+                background: 'linear-gradient(135deg, rgba(29,78,216,0.07), rgba(6,182,212,0.07))',
+                border: '1px solid rgba(29,78,216,0.2)',
+                borderRadius: '10px', padding: '10px 18px',
+                textDecoration: 'none', transition: 'all 0.2s',
+              }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(29,78,216,0.45)'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(29,78,216,0.2)'}
+            >
+              <span style={{ fontSize: '20px' }}>🏭</span>
+              <div>
+                <div style={{ fontSize: '11px', fontWeight: 800, color: '#1d4ed8', letterSpacing: '0.06em', lineHeight: 1 }}>UDYAM REGISTERED</div>
+                <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 500, letterSpacing: '0.04em' }}>MSME · Govt. of India</div>
+              </div>
+            </a>
+
+            <div style={{ width: '1px', height: '32px', background: 'var(--border)' }} />
+
             {[
               { icon: '🏆', label: '50+ Projects', sub: 'Successfully Delivered' },
               { icon: '🤝', label: '30+ Clients', sub: 'Across Industries' },

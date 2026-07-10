@@ -9,7 +9,8 @@
     "logoLight": "/logo-light.png",
     "logoDark": "/logo-dark.png",
     "companyProfile": "/TechYentra.pdf",
-    "dpiitCertificate": "/DPIIT.pdf"
+    "dpiitCertificate": "/DPIIT.pdf",
+    "udyamCertificate": "/Udyam.pdf"
   },
   "stats": [
     { "value": "50+", "label": "Projects Delivered" },
