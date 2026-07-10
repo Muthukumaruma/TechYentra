@@ -38,7 +38,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { name, email, company, phone, service, budget, message, captchaToken } = req.body || {};
+  const { name, email, company, phone, service, message, captchaToken } = req.body || {};
 
   // ── reCAPTCHA verification ──────────────────────────────────────────────
   if (!captchaToken) {
@@ -83,7 +83,6 @@ export default async function handler(req, res) {
             ${company ? row('Company', company) : ''}
             ${phone ? row('Phone', `<a href="tel:${phone}" style="color:#1d4ed8;">${phone}</a>`) : ''}
             ${service ? row('Service Interested', service) : ''}
-            ${budget ? row('Budget', budget) : ''}
           </table>
 
           <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:20px 24px;margin-top:16px;">

@@ -11,7 +11,7 @@ const SERVICES_LIST = content.services.map(s => s.title);
 
 const INITIAL_FORM = {
   name: '', email: '', company: '', phone: '',
-  service: '', budget: '', message: '', consent: false,
+  service: '', message: '', consent: false,
 };
 
 const SITE_KEY = '6Le2ogUtAAAAACHvmBZxPp72hah9Chsp8qvWu0r6';
@@ -241,21 +241,6 @@ export default function ContactPage() {
                       >
                         <option value="">Select a service...</option>
                         {SERVICES_LIST.map(s => <option key={s} value={s}>{s}</option>)}
-                      </select>
-                    </div>
-
-                    {/* Budget */}
-                    <div style={{ marginBottom: '16px' }}>
-                      <label style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px' }}>
-                        Estimated Budget
-                      </label>
-                      <select name="budget" value={form.budget} onChange={handleChange} style={inputStyle}>
-                        <option value="">Select budget range...</option>
-                        <option>Under ₹5 Lakhs</option>
-                        <option>₹5 – ₹15 Lakhs</option>
-                        <option>₹15 – ₹50 Lakhs</option>
-                        <option>₹50 Lakhs+</option>
-                        <option>Let's discuss</option>
                       </select>
                     </div>
 

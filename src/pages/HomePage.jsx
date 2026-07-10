@@ -246,6 +246,62 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ─── Trust Strip ─── */}
+      <section style={{ background: 'var(--bg)', borderBottom: '1px solid var(--border)', padding: '20px 0' }}>
+        <div className="container">
+          <div style={{
+            display: 'flex', flexWrap: 'wrap', alignItems: 'center',
+            justifyContent: 'center', gap: '12px 32px',
+          }}>
+            {/* DPIIT Badge */}
+            <a
+              href={content.company.dpiitCertificate}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="View DPIIT Certificate"
+              style={{
+                display: 'flex', alignItems: 'center', gap: '10px',
+                background: 'linear-gradient(135deg, rgba(255,153,0,0.08), rgba(19,136,8,0.08))',
+                border: '1px solid rgba(255,153,0,0.25)',
+                borderRadius: '10px', padding: '10px 18px',
+                textDecoration: 'none', transition: 'all 0.2s',
+              }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,153,0,0.5)'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,153,0,0.25)'}
+            >
+              {/* Indian flag colors bar */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                <div style={{ width: '18px', height: '4px', background: '#FF9900', borderRadius: '2px' }} />
+                <div style={{ width: '18px', height: '4px', background: '#ffffff', borderRadius: '2px', border: '1px solid #ddd' }} />
+                <div style={{ width: '18px', height: '4px', background: '#138808', borderRadius: '2px' }} />
+              </div>
+              <div>
+                <div style={{ fontSize: '11px', fontWeight: 800, color: '#FF9900', letterSpacing: '0.06em', lineHeight: 1 }}>DPIIT RECOGNISED</div>
+                <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 500, letterSpacing: '0.04em' }}>Startup India</div>
+              </div>
+            </a>
+
+            <div style={{ width: '1px', height: '32px', background: 'var(--border)' }} />
+
+            {[
+              { icon: '🏆', label: '50+ Projects', sub: 'Successfully Delivered' },
+              { icon: '🤝', label: '30+ Clients', sub: 'Across Industries' },
+              { icon: '🤖', label: '10+ AI Products', sub: 'Built & Deployed' },
+              { icon: '⭐', label: '5+ Years', sub: 'Of Excellence' },
+            ].map((item, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontSize: '20px' }}>{item.icon}</span>
+                <div>
+                  <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', lineHeight: 1.2 }}>{item.label}</div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{item.sub}</div>
+                </div>
+                {i < 3 && <div style={{ width: '1px', height: '28px', background: 'var(--border)', marginLeft: '12px' }} />}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ─── Services Preview ─── */}
       <section className="section circuit-bg" style={{ background: 'var(--bg-soft)' }}>
         <div className="container">

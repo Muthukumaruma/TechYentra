@@ -155,6 +155,16 @@ export default function Footer() {
               >
                 <Download size={14} /> Download Company Profile
               </a>
+              <a
+                href={content.company.dpiitCertificate}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 600, color: '#FF9900', marginTop: '6px', transition: 'opacity 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.opacity = '0.75'}
+                onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+              >
+                🇮🇳 DPIIT Recognised Startup
+              </a>
             </div>
           </div>
         </div>

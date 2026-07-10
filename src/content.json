@@ -8,7 +8,8 @@
     "email": "info@techyenthra.com",
     "logoLight": "/logo-light.png",
     "logoDark": "/logo-dark.png",
-    "companyProfile": "/TechYentra.pdf"
+    "companyProfile": "/TechYentra.pdf",
+    "dpiitCertificate": "/DPIIT.pdf"
   },
   "stats": [
     { "value": "50+", "label": "Projects Delivered" },
