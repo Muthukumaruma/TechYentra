@@ -9,6 +9,10 @@ import ContactPage from './pages/ContactPage';
 import PrivacyPage from './pages/PrivacyPage';
 import TermsPage from './pages/TermsPage';
 import CookiePage from './pages/CookiePage';
+import SecurityPage from './pages/SecurityPage';
+import DataProtectionPage from './pages/DataProtectionPage';
+import DisclosurePage from './pages/DisclosurePage';
+import BusinessContinuityPage from './pages/BusinessContinuityPage';
 import './index.css';
 
 export default function App() {
@@ -25,6 +29,10 @@ export default function App() {
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/cookies" element={<CookiePage />} />
+          <Route path="/security" element={<SecurityPage />} />
+          <Route path="/data-protection" element={<DataProtectionPage />} />
+          <Route path="/disclosure" element={<DisclosurePage />} />
+          <Route path="/business-continuity" element={<BusinessContinuityPage />} />
         </Routes>
       </Layout>
     </BrowserRouter>

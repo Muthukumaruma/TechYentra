@@ -61,6 +61,34 @@
   </url>
 
   <url>
+    <loc>https://www.techyenthra.com/security</loc>
+    <lastmod>2025-07-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://www.techyenthra.com/data-protection</loc>
+    <lastmod>2025-07-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://www.techyenthra.com/disclosure</loc>
+    <lastmod>2025-07-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://www.techyenthra.com/business-continuity</loc>
+    <lastmod>2025-07-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
     <loc>https://www.techyenthra.com/TechYentra.pdf</loc>
     <lastmod>2025-07-10</lastmod>
     <changefreq>yearly</changefreq>

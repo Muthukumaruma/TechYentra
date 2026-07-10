@@ -215,6 +215,10 @@ export default function Footer() {
               { label: 'Privacy Policy', path: '/privacy' },
               { label: 'Terms of Service', path: '/terms' },
               { label: 'Cookie Policy', path: '/cookies' },
+              { label: 'Security', path: '/security' },
+              { label: 'Data Protection', path: '/data-protection' },
+              { label: 'Disclosure', path: '/disclosure' },
+              { label: 'Business Continuity', path: '/business-continuity' },
             ].map(({ label, path }) => (
               <NavLink
                 key={label}
