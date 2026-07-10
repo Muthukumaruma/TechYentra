@@ -306,23 +306,6 @@ export default function HomePage() {
               </div>
             </a>
 
-            <div style={{ width: '1px', height: '32px', background: 'var(--border)' }} />
-
-            {[
-              { icon: '🏆', label: '50+ Projects', sub: 'Successfully Delivered' },
-              { icon: '🤝', label: '30+ Clients', sub: 'Across Industries' },
-              { icon: '🤖', label: '10+ AI Products', sub: 'Built & Deployed' },
-              { icon: '⭐', label: '5+ Years', sub: 'Of Excellence' },
-            ].map((item, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: '20px' }}>{item.icon}</span>
-                <div>
-                  <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', lineHeight: 1.2 }}>{item.label}</div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{item.sub}</div>
-                </div>
-                {i < 3 && <div style={{ width: '1px', height: '28px', background: 'var(--border)', marginLeft: '12px' }} />}
-              </div>
-            ))}
           </div>
         </div>
       </section>
