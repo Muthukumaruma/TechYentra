@@ -1,7 +1,35 @@
 import { motion } from 'framer-motion';
 import { Calendar, FileText } from 'lucide-react';
 
-export default function LegalPage({ title, lastUpdated, intro, sections }) {
+const ALL_CLAUSES = {
+  governingLaw: {
+    label: 'Governing Law & Jurisdiction',
+    text: 'This document shall be governed by the laws of India. Subject to applicable law, the courts having jurisdiction in Madurai, Tamil Nadu, India shall have exclusive jurisdiction over any disputes arising from this document.',
+  },
+  liability: {
+    label: 'Limitation of Liability',
+    text: 'To the maximum extent permitted by applicable law, TechYenthra Technologies Private Limited shall not be liable for any indirect, incidental, consequential, special, exemplary, or punitive damages — including but not limited to loss of revenue, data, goodwill, or business interruption — arising from your use of our services or website, even if advised of the possibility of such damages.',
+  },
+  ip: {
+    label: 'Intellectual Property',
+    text: 'All content, branding, software, documentation, and materials on this website and in our deliverables are the exclusive intellectual property of TechYenthra Technologies Private Limited unless explicitly stated otherwise. Unauthorised reproduction, distribution, or use is strictly prohibited and may result in legal action.',
+  },
+  indemnification: {
+    label: 'Indemnification',
+    text: 'You agree to indemnify, defend, and hold harmless TechYenthra Technologies Private Limited, its directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses — including reasonable legal fees — arising out of your use of our services, violation of these policies, or infringement of any third-party rights.',
+  },
+  modify: {
+    label: 'Right to Modify',
+    text: 'TechYenthra Technologies Private Limited reserves the right to update, amend, or replace any part of this document at any time. Changes take effect upon publication on our website. Continued use of our services after any modification constitutes acceptance of the revised document.',
+  },
+  severability: {
+    label: 'Severability',
+    text: 'If any provision of this document is found to be invalid, unlawful, or unenforceable by a court of competent jurisdiction, such provision shall be limited or eliminated to the minimum extent necessary, and the remaining provisions shall continue in full force and effect.',
+  },
+};
+
+export default function LegalPage({ title, lastUpdated, intro, sections, clauses }) {
+  const activeClauses = (clauses || []).map(key => ALL_CLAUSES[key]).filter(Boolean);
   return (
     <div className="page-wrapper">
       {/* Hero */}
@@ -123,59 +151,36 @@ export default function LegalPage({ title, lastUpdated, intro, sections }) {
               ))}
             </div>
 
-            {/* Legal Notice */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              style={{ marginTop: '56px', display: 'flex', flexDirection: 'column', gap: '12px' }}
-            >
-              {[
-                {
-                  label: 'Governing Law & Jurisdiction',
-                  text: 'This document and any disputes arising from it shall be governed by and construed in accordance with the laws of India. Any legal proceedings shall be subject to the exclusive jurisdiction of the competent courts of Bengaluru, Karnataka, India.',
-                },
-                {
-                  label: 'Limitation of Liability',
-                  text: 'To the maximum extent permitted by applicable law, TechYenthra Technologies Private Limited shall not be liable for any indirect, incidental, consequential, special, exemplary, or punitive damages — including but not limited to loss of revenue, data, goodwill, or business interruption — arising from your use of our services or website, even if advised of the possibility of such damages.',
-                },
-                {
-                  label: 'Intellectual Property',
-                  text: 'All content, branding, software, documentation, and materials on this website and in our deliverables are the exclusive intellectual property of TechYenthra Technologies Private Limited unless explicitly stated otherwise. Unauthorised reproduction, distribution, or use is strictly prohibited and may result in legal action.',
-                },
-                {
-                  label: 'Indemnification',
-                  text: 'You agree to indemnify, defend, and hold harmless TechYenthra Technologies Private Limited, its directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses — including reasonable legal fees — arising out of your use of our services, violation of these policies, or infringement of any third-party rights.',
-                },
-                {
-                  label: 'Right to Modify',
-                  text: 'TechYenthra Technologies Private Limited reserves the right to update, amend, or replace any part of this document at any time. Changes take effect upon publication on our website. Continued use of our services after any modification constitutes acceptance of the revised document.',
-                },
-                {
-                  label: 'Severability',
-                  text: 'If any provision of this document is found to be invalid, unlawful, or unenforceable by a court of competent jurisdiction, such provision shall be limited or eliminated to the minimum extent necessary, and the remaining provisions shall continue in full force and effect.',
-                },
-              ].map(({ label, text }) => (
-                <div
-                  key={label}
-                  style={{
-                    padding: '16px 20px',
-                    borderRadius: '10px',
-                    background: 'linear-gradient(135deg,rgba(29,78,216,0.03),rgba(6,182,212,0.03))',
-                    border: '1px solid rgba(29,78,216,0.08)',
-                  }}
-                >
-                  <p style={{ fontSize: '12px', color: 'var(--text)', lineHeight: 1.75 }}>
-                    <strong style={{ color: '#1d4ed8', fontWeight: 700 }}>{label}: </strong>
-                    {text}
-                  </p>
-                </div>
-              ))}
-              <p style={{ fontSize: '11px', color: 'var(--text-muted)', textAlign: 'center', marginTop: '8px', lineHeight: 1.6 }}>
-                © {new Date().getFullYear()} TechYenthra Technologies Private Limited · CIN: U62011TN2026PTC194186 · All rights reserved.
-              </p>
-            </motion.div>
+            {/* Legal Clauses */}
+            {activeClauses.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                style={{ marginTop: '56px', display: 'flex', flexDirection: 'column', gap: '12px' }}
+              >
+                {activeClauses.map(({ label, text }) => (
+                  <div
+                    key={label}
+                    style={{
+                      padding: '16px 20px',
+                      borderRadius: '10px',
+                      background: 'linear-gradient(135deg,rgba(29,78,216,0.03),rgba(6,182,212,0.03))',
+                      border: '1px solid rgba(29,78,216,0.08)',
+                    }}
+                  >
+                    <p style={{ fontSize: '12px', color: 'var(--text)', lineHeight: 1.75 }}>
+                      <strong style={{ color: '#1d4ed8', fontWeight: 700 }}>{label}: </strong>
+                      {text}
+                    </p>
+                  </div>
+                ))}
+                <p style={{ fontSize: '11px', color: 'var(--text-muted)', textAlign: 'center', marginTop: '8px', lineHeight: 1.6 }}>
+                  © {new Date().getFullYear()} TechYenthra Technologies Private Limited · CIN: U62011TN2026PTC194186 · All rights reserved.
+                </p>
+              </motion.div>
+            )}
           </div>
         </div>
       </section>
