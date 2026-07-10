@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import {
   Globe, Smartphone, Brain, Cloud, BarChart3, Shield,
-  Layers, Palette, GitBranch, Cpu, Bot, Database, ArrowRight,
+  Layers, Palette, GitBranch, Cpu, Bot, Database, Building2, ArrowRight,
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import SEO from '../components/SEO';
@@ -13,13 +13,13 @@ import content from '../content.json';
 
 const ICON_MAP = {
   Globe, Smartphone, Brain, Cloud, BarChart3, Shield,
-  Layers, Palette, GitBranch, Cpu, Bot, Database,
+  Layers, Palette, GitBranch, Cpu, Bot, Database, Building2,
 };
 
 const ICON_COLORS = [
   '#1d4ed8', '#7c3aed', '#059669', '#0891b2',
   '#d97706', '#dc2626', '#0f172a', '#be185d',
-  '#065f46', '#1d4ed8', '#7c3aed', '#6366f1',
+  '#065f46', '#1d4ed8', '#7c3aed', '#6366f1', '#15803d',
 ];
 
 export default function ServicesPage() {

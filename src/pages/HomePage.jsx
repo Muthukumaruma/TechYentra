@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
-import { ArrowRight, CheckCircle2, Zap, Shield, Globe, Brain, Cpu, BarChart3 } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Zap, Shield, Globe, Brain, Cpu, BarChart3, CheckCheck, ExternalLink, Download } from 'lucide-react';
 import ParticleField from '../components/ParticleField';
 import SEO from '../components/SEO';
 import SectionHeader from '../components/ui/SectionHeader';
@@ -48,7 +48,7 @@ export default function HomePage() {
       <SEO
         path="/"
         description="TechYenthra Technologies – India's trusted software development company. We build AI platforms, web & mobile apps, OTT streaming, travel tech, and enterprise solutions. 50+ projects delivered."
-        keywords="software development company India, AI development Bengaluru, web development company India, mobile app development, OTT platform development, online travel agent software India"
+        keywords="software development company India, AI development Bengaluru, web development company India, mobile app development, OTT platform development, online travel agent software India, government IT services India, GeM registered software company, e-governance platform development, enterprise software company Bengaluru, SaaS product development India"
         schema={HOME_SCHEMA}
       />
       {/* ─── Hero ─── */}
@@ -170,6 +170,22 @@ export default function HomePage() {
                   View Our Work
                 </motion.div>
               </NavLink>
+              <a href={content.company.companyProfile} download="TechYenthra-Company-Profile.pdf">
+                <motion.div
+                  whileHover={{ scale: 1.04, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '8px',
+                    padding: '15px 28px', borderRadius: '12px',
+                    background: 'rgba(6,182,212,0.1)',
+                    border: '1px solid rgba(6,182,212,0.3)',
+                    color: '#06b6d4', fontWeight: 600, fontSize: '15px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <Download size={16} /> Company Profile
+                </motion.div>
+              </a>
             </motion.div>
 
           </div>
@@ -326,8 +342,78 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ─── Our Products ─── */}
+      <section className="section" style={{ background: 'var(--bg-soft)' }}>
+        <div className="container">
+          <SectionHeader
+            eyebrow="Own Products"
+            title="SaaS Platforms We"
+            highlight="Built & Own"
+            subtitle="Beyond client work — we build and operate our own products that solve real-world problems."
+          />
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+            gap: '24px',
+          }}>
+            {content.products.map((product, i) => (
+              <motion.div
+                key={product.id}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.12, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                style={{
+                  background: 'var(--card-bg)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '20px',
+                  padding: '36px 32px',
+                  position: 'relative',
+                  overflow: 'hidden',
+                }}
+              >
+                <div style={{
+                  position: 'absolute', top: 0, left: 0, right: 0, height: '4px',
+                  background: `linear-gradient(90deg, ${product.color}, ${product.color}88)`,
+                }} />
+                <span style={{
+                  display: 'inline-block',
+                  background: `${product.color}18`,
+                  color: product.color,
+                  border: `1px solid ${product.color}33`,
+                  borderRadius: '100px',
+                  padding: '4px 14px',
+                  fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  marginBottom: '20px',
+                }}>
+                  {product.badge}
+                </span>
+                <h3 style={{ fontSize: '26px', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '8px' }}>
+                  {product.name}
+                </h3>
+                <p style={{ fontSize: '14px', fontWeight: 600, color: product.color, marginBottom: '14px' }}>
+                  {product.tagline}
+                </p>
+                <p style={{ fontSize: '15px', color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: '24px' }}>
+                  {product.description}
+                </p>
+                <ul style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {product.highlights.map((h, j) => (
+                    <li key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '14px', color: 'var(--text)' }}>
+                      <CheckCheck size={15} style={{ color: product.color, flexShrink: 0, marginTop: '2px' }} />
+                      {h}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ─── Featured Projects ─── */}
-      <section className="section dot-bg" style={{ background: 'var(--bg-soft)' }}>
+      <section className="section dot-bg" style={{ background: 'var(--bg)' }}>
         <div className="container">
           <SectionHeader
             eyebrow="Our Work"
@@ -405,6 +491,15 @@ export default function HomePage() {
                   color: '#fff',
                 }}>
                   {content.company.phone}
+                </Button>
+              </a>
+              <a href={content.company.companyProfile} download="TechYenthra-Company-Profile.pdf">
+                <Button size="lg" icon={<Download size={16} />} style={{
+                  background: 'rgba(6,182,212,0.12)',
+                  border: '1px solid rgba(6,182,212,0.3)',
+                  color: '#06b6d4',
+                }}>
+                  Company Profile
                 </Button>
               </a>
             </div>

@@ -7,7 +7,8 @@
     "phone": "+91 81051 77337",
     "email": "info@techyenthra.com",
     "logoLight": "/logo-light.png",
-    "logoDark": "/logo-dark.png"
+    "logoDark": "/logo-dark.png",
+    "companyProfile": "/TechYentra.pdf"
   },
   "stats": [
     { "value": "50+", "label": "Projects Delivered" },
@@ -137,6 +138,33 @@
       "title": "Blockchain & Web3",
       "description": "Smart contracts, decentralized applications, NFT platforms, and enterprise blockchain solutions on Ethereum and Hyperledger.",
       "technologies": ["Solidity", "Ethereum", "Hyperledger", "Web3.js", "IPFS"]
+    },
+    {
+      "id": 13,
+      "icon": "Building2",
+      "title": "Government IT Services",
+      "description": "Technology solutions for government departments and public sector undertakings — e-governance platforms, digital India compliance, citizen portals, and GeM-ready software procurement.",
+      "technologies": ["Digital India", "e-Governance", "GeM Portal", "NIC Standards", "Open Standards"]
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "CodeSense",
+      "tagline": "AI Code Review Platform",
+      "description": "Automatically analyse pull requests, detect bugs, enforce coding standards, and accelerate your team's velocity — integrated directly into GitHub & GitLab.",
+      "badge": "AI Product",
+      "color": "#1d4ed8",
+      "highlights": ["Automated PR analysis & bug detection", "GitHub / GitLab / Bitbucket integration", "AI-generated fix suggestions & code diffs"]
+    },
+    {
+      "id": 2,
+      "name": "Jothisham",
+      "tagline": "AI Astrology & Consultation Platform",
+      "description": "Full-featured astrology SaaS platform with AI-powered birth chart analysis, live one-on-one consultations, Kundali matching, and personalised daily horoscopes.",
+      "badge": "Live Platform",
+      "color": "#7c3aed",
+      "highlights": ["AI Vedic birth chart & Kundali analysis", "Live 1:1 consultation with certified astrologers", "Multi-language support & mobile-ready"]
     }
   ],
   "projects": [

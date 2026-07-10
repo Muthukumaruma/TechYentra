@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Phone, Mail, Share2, Code2 } from 'lucide-react';
+import { Phone, Mail, Share2, Code2, Download } from 'lucide-react';
 import content from '../../content.json';
 
 const serviceLinks = content.services.slice(0, 6).map(s => s.title);
@@ -145,6 +145,15 @@ export default function Footer() {
               >
                 <Mail size={15} />
                 {content.company.email}
+              </a>
+              <a
+                href={content.company.companyProfile}
+                download="TechYenthra-Company-Profile.pdf"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '13px', fontWeight: 600, color: '#06b6d4', marginTop: '8px', transition: 'opacity 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.opacity = '0.75'}
+                onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+              >
+                <Download size={14} /> Download Company Profile
               </a>
             </div>
           </div>
