@@ -207,45 +207,6 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* ─── Stats ─── */}
-      <section style={{ background: 'var(--primary)', padding: '60px 0' }}>
-        <div className="container">
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-            gap: '0',
-          }}>
-            {content.stats.map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
-                style={{
-                  textAlign: 'center', padding: '28px 24px',
-                  borderRight: i < content.stats.length - 1 ? '1px solid rgba(255,255,255,0.08)' : 'none',
-                }}
-              >
-                <div style={{
-                  fontSize: 'clamp(32px, 4vw, 48px)',
-                  fontWeight: 800, letterSpacing: '-0.03em',
-                  background: 'linear-gradient(135deg, #06b6d4, #3b82f6)',
-                  WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text', lineHeight: 1,
-                  marginBottom: '8px',
-                }}>
-                  <AnimatedCounter value={stat.value} />
-                </div>
-                <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: '13px', fontWeight: 500, letterSpacing: '0.02em' }}>
-                  {stat.label}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ─── Trust Strip ─── */}
       <section style={{ background: 'var(--bg)', borderBottom: '1px solid var(--border)', padding: '20px 0' }}>
         <div className="container">
