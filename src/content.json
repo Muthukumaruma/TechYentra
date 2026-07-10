@@ -393,5 +393,44 @@
         "content": "For any questions regarding these Terms of Service, please reach us by phone at +91 81051 77337 or email at info@techyenthra.com."
       }
     ]
+  },
+  "cookie": {
+    "title": "Cookie Policy",
+    "lastUpdated": "July 10, 2025",
+    "intro": "This Cookie Policy explains how TechYenthra Technologies Private Limited ('we', 'our', or 'us') uses cookies and similar tracking technologies on www.techyenthra.com. By continuing to use our website, you consent to the use of cookies as described in this policy.",
+    "sections": [
+      {
+        "heading": "What Are Cookies",
+        "content": "Cookies are small text files placed on your device (computer, tablet, or mobile) when you visit a website. They are widely used to make websites work efficiently, remember your preferences, and provide information to website owners. Cookies do not contain personally identifiable information on their own, but they can be linked to personal information we hold about you."
+      },
+      {
+        "heading": "Types of Cookies We Use",
+        "content": "We use the following categories of cookies: (1) Strictly Necessary Cookies – essential for the website to function correctly, such as security tokens for form submissions. You cannot opt out of these. (2) Performance & Analytics Cookies – help us understand how visitors interact with our website by collecting anonymous information about pages visited, time spent, and errors encountered. (3) Functional Cookies – remember your preferences and settings to provide a more personalised experience. (4) Security Cookies – used by reCAPTCHA Enterprise (Google) to detect and prevent spam and abusive form submissions. These cookies assess risk signals and cannot be disabled without affecting form functionality."
+      },
+      {
+        "heading": "Third-Party Cookies",
+        "content": "Our website uses the following third-party services that may set their own cookies: (1) Google reCAPTCHA Enterprise – for spam protection on our contact form. Google's privacy policy applies: https://policies.google.com/privacy. (2) Google Analytics (if enabled) – for website traffic analysis. Data collected is anonymised and aggregated. (3) Vercel – our hosting provider may set performance and security cookies. These third parties have their own privacy and cookie policies, and we do not control the cookies they set."
+      },
+      {
+        "heading": "How Long Cookies Last",
+        "content": "Cookies can be either 'session cookies' or 'persistent cookies'. Session cookies are temporary and are deleted when you close your browser. Persistent cookies remain on your device for a set period or until you delete them manually. Most cookies we use are session-based or expire within 30 days."
+      },
+      {
+        "heading": "Managing & Disabling Cookies",
+        "content": "You can control and manage cookies through your browser settings. Most browsers allow you to: view cookies stored on your device, block all or specific cookies, delete cookies at any time. Please note that disabling certain cookies may affect the functionality of our website, including the contact form's spam protection. To manage cookies, refer to your browser's help documentation: Chrome: Settings → Privacy and Security → Cookies. Firefox: Options → Privacy & Security. Safari: Preferences → Privacy. Edge: Settings → Privacy, Search, and Services."
+      },
+      {
+        "heading": "Cookie Consent",
+        "content": "When you first visit our website, you may be asked to consent to non-essential cookies. You can withdraw your consent at any time by adjusting your browser settings or clearing cookies. Strictly necessary cookies (including security cookies) do not require your consent as they are essential to providing the service you have requested."
+      },
+      {
+        "heading": "Changes to This Policy",
+        "content": "We may update this Cookie Policy from time to time to reflect changes in technology, legislation, or our data practices. We will notify you of significant changes by posting a prominent notice on our website. We encourage you to review this policy periodically."
+      },
+      {
+        "heading": "Contact Us",
+        "content": "If you have any questions about our use of cookies or this Cookie Policy, please contact us at: Email: info@techyenthra.com | Phone: +91 81051 77337 | TechYenthra Technologies Private Limited, Bengaluru, Karnataka, India."
+      }
+    ]
   }
 }

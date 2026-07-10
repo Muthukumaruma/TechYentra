@@ -209,6 +209,7 @@ export default function Footer() {
             {[
               { label: 'Privacy Policy', path: '/privacy' },
               { label: 'Terms of Service', path: '/terms' },
+              { label: 'Cookie Policy', path: '/cookies' },
             ].map(({ label, path }) => (
               <NavLink
                 key={label}
