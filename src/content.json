@@ -10,7 +10,10 @@
     "logoDark": "/logo-dark.png",
     "companyProfile": "/TechYentra.pdf",
     "dpiitCertificate": "/DPIIT.pdf",
-    "udyamCertificate": "/Udyam.pdf"
+    "udyamCertificate": "/Udyam.pdf",
+    "cin": "U62011TN2026PTC194186",
+    "gemActive": false,
+    "gemSellerId": ""
   },
   "stats": [
     { "value": "50+", "label": "Projects Delivered" },

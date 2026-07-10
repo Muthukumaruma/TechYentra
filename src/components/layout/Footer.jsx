@@ -202,9 +202,14 @@ export default function Footer() {
             gap: '12px',
           }}
         >
-          <p style={{ fontSize: '13px' }}>
-            © {content.footer.copyright}
-          </p>
+          <div>
+            <p style={{ fontSize: '13px' }}>
+              © {content.footer.copyright}
+            </p>
+            <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', marginTop: '4px' }}>
+              CIN: {content.company.cin}
+            </p>
+          </div>
           <div style={{ display: 'flex', gap: '24px' }}>
             {[
               { label: 'Privacy Policy', path: '/privacy' },

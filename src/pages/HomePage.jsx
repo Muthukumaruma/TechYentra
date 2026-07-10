@@ -208,64 +208,52 @@ export default function HomePage() {
       </section>
 
       {/* ─── Trust Strip ─── */}
-      <section style={{ background: 'var(--bg)', borderBottom: '1px solid var(--border)', padding: '20px 0' }}>
+      <section style={{ background: 'var(--bg)', borderBottom: '1px solid var(--border)', padding: '18px 0' }}>
         <div className="container">
-          <div style={{
-            display: 'flex', flexWrap: 'wrap', alignItems: 'center',
-            justifyContent: 'center', gap: '12px 32px',
-          }}>
-            {/* DPIIT Badge */}
-            <a
-              href={content.company.dpiitCertificate}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="View DPIIT Certificate"
-              style={{
-                display: 'flex', alignItems: 'center', gap: '10px',
-                background: 'linear-gradient(135deg, rgba(255,153,0,0.08), rgba(19,136,8,0.08))',
-                border: '1px solid rgba(255,153,0,0.25)',
-                borderRadius: '10px', padding: '10px 18px',
-                textDecoration: 'none', transition: 'all 0.2s',
-              }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,153,0,0.5)'}
-              onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,153,0,0.25)'}
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '10px 24px' }}>
+
+            {/* Startup India / DPIIT Badge */}
+            <a href={content.company.dpiitCertificate} target="_blank" rel="noopener noreferrer" title="DPIIT Recognition Certificate"
+              style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'linear-gradient(135deg,rgba(255,153,0,0.08),rgba(19,136,8,0.08))', border: '1px solid rgba(255,153,0,0.3)', borderRadius: '10px', padding: '9px 16px', textDecoration: 'none', transition: 'all 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,153,0,0.6)'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,153,0,0.3)'}
             >
-              {/* Indian flag colors bar */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                <div style={{ width: '18px', height: '4px', background: '#FF9900', borderRadius: '2px' }} />
-                <div style={{ width: '18px', height: '4px', background: '#ffffff', borderRadius: '2px', border: '1px solid #ddd' }} />
-                <div style={{ width: '18px', height: '4px', background: '#138808', borderRadius: '2px' }} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', flexShrink: 0 }}>
+                <div style={{ width: '20px', height: '4px', background: '#FF9900', borderRadius: '2px' }} />
+                <div style={{ width: '20px', height: '4px', background: '#fff', borderRadius: '2px', border: '1px solid #e5e7eb' }} />
+                <div style={{ width: '20px', height: '4px', background: '#138808', borderRadius: '2px' }} />
               </div>
               <div>
-                <div style={{ fontSize: '11px', fontWeight: 800, color: '#FF9900', letterSpacing: '0.06em', lineHeight: 1 }}>DPIIT RECOGNISED</div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 500, letterSpacing: '0.04em' }}>Startup India</div>
+                <div style={{ fontSize: '11px', fontWeight: 800, color: '#FF9900', letterSpacing: '0.07em', lineHeight: 1.1 }}>STARTUP INDIA</div>
+                <div style={{ fontSize: '10px', color: '#138808', fontWeight: 700, letterSpacing: '0.04em' }}>DPIIT Recognised</div>
               </div>
             </a>
 
-            <div style={{ width: '1px', height: '32px', background: 'var(--border)' }} />
+            <div style={{ width: '1px', height: '30px', background: 'var(--border)' }} />
 
-            {/* Udyam Badge */}
-            <a
-              href={content.company.udyamCertificate}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="View Udyam Registration Certificate"
-              style={{
-                display: 'flex', alignItems: 'center', gap: '10px',
-                background: 'linear-gradient(135deg, rgba(29,78,216,0.07), rgba(6,182,212,0.07))',
-                border: '1px solid rgba(29,78,216,0.2)',
-                borderRadius: '10px', padding: '10px 18px',
-                textDecoration: 'none', transition: 'all 0.2s',
-              }}
+            {/* Udyam MSME Badge */}
+            <a href={content.company.udyamCertificate} target="_blank" rel="noopener noreferrer" title="Udyam Registration Certificate"
+              style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(29,78,216,0.06)', border: '1px solid rgba(29,78,216,0.2)', borderRadius: '10px', padding: '9px 16px', textDecoration: 'none', transition: 'all 0.2s' }}
               onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(29,78,216,0.45)'}
               onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(29,78,216,0.2)'}
             >
-              <span style={{ fontSize: '20px' }}>🏭</span>
+              <span style={{ fontSize: '18px' }}>🏭</span>
               <div>
-                <div style={{ fontSize: '11px', fontWeight: 800, color: '#1d4ed8', letterSpacing: '0.06em', lineHeight: 1 }}>UDYAM REGISTERED</div>
-                <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 500, letterSpacing: '0.04em' }}>MSME · Govt. of India</div>
+                <div style={{ fontSize: '11px', fontWeight: 800, color: '#1d4ed8', letterSpacing: '0.07em', lineHeight: 1.1 }}>UDYAM REGISTERED</div>
+                <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.04em' }}>MSME · Govt. of India</div>
               </div>
             </a>
+
+            <div style={{ width: '1px', height: '30px', background: 'var(--border)' }} />
+
+            {/* GeM Badge */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(5,150,105,0.06)', border: '1px dashed rgba(5,150,105,0.35)', borderRadius: '10px', padding: '9px 16px' }}>
+              <span style={{ fontSize: '18px' }}>🛒</span>
+              <div>
+                <div style={{ fontSize: '11px', fontWeight: 800, color: '#059669', letterSpacing: '0.07em', lineHeight: 1.1 }}>GeM SELLER</div>
+                <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.04em' }}>Registration Active</div>
+              </div>
+            </div>
 
           </div>
         </div>
