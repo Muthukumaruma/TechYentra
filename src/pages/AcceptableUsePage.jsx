@@ -1,12 +1,12 @@
 import LegalPage from '../components/ui/LegalPage';
 import content from '../content.json';
 
-export default function TermsPage() {
-  const { title, lastUpdated, intro, sections } = content.terms;
+export default function AcceptableUsePage() {
+  const { title, lastUpdated, intro, sections } = content.acceptableUse;
   return (
     <LegalPage
       title={title} lastUpdated={lastUpdated} intro={intro} sections={sections}
-      clauses={[]}
+      clauses={['governingLaw', 'liability', 'modify', 'severability']}
     />
   );
 }

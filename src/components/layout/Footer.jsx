@@ -210,11 +210,15 @@ export default function Footer() {
               CIN: {content.company.cin}
             </p>
           </div>
-          <div style={{ display: 'flex', gap: '24px' }}>
+          <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
             {[
+              { label: 'Legal Center', path: '/legal' },
               { label: 'Privacy Policy', path: '/privacy' },
-              { label: 'Terms of Service', path: '/terms' },
+              { label: 'Terms & Conditions', path: '/terms' },
               { label: 'Cookie Policy', path: '/cookies' },
+              { label: 'Refund Policy', path: '/refund' },
+              { label: 'Acceptable Use', path: '/acceptable-use' },
+              { label: 'SLA', path: '/sla' },
               { label: 'Security', path: '/security' },
               { label: 'Data Protection', path: '/data-protection' },
               { label: 'Disclosure', path: '/disclosure' },

@@ -13,6 +13,10 @@ import SecurityPage from './pages/SecurityPage';
 import DataProtectionPage from './pages/DataProtectionPage';
 import DisclosurePage from './pages/DisclosurePage';
 import BusinessContinuityPage from './pages/BusinessContinuityPage';
+import RefundPage from './pages/RefundPage';
+import AcceptableUsePage from './pages/AcceptableUsePage';
+import SLAPage from './pages/SLAPage';
+import LegalCenterPage from './pages/LegalCenterPage';
 import './index.css';
 
 export default function App() {
@@ -33,6 +37,10 @@ export default function App() {
           <Route path="/data-protection" element={<DataProtectionPage />} />
           <Route path="/disclosure" element={<DisclosurePage />} />
           <Route path="/business-continuity" element={<BusinessContinuityPage />} />
+          <Route path="/refund" element={<RefundPage />} />
+          <Route path="/acceptable-use" element={<AcceptableUsePage />} />
+          <Route path="/sla" element={<SLAPage />} />
+          <Route path="/legal" element={<LegalCenterPage />} />
         </Routes>
       </Layout>
     </BrowserRouter>

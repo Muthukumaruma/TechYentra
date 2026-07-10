@@ -89,6 +89,34 @@
   </url>
 
   <url>
+    <loc>https://www.techyenthra.com/legal</loc>
+    <lastmod>2025-07-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://www.techyenthra.com/refund</loc>
+    <lastmod>2025-07-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://www.techyenthra.com/acceptable-use</loc>
+    <lastmod>2025-07-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://www.techyenthra.com/sla</loc>
+    <lastmod>2025-07-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
     <loc>https://www.techyenthra.com/TechYentra.pdf</loc>
     <lastmod>2025-07-10</lastmod>
     <changefreq>yearly</changefreq>
