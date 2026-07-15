@@ -187,6 +187,21 @@ export default function Footer() {
               >
                 🏭 Udyam MSME
               </a>
+              <a
+                href="https://www.f6s.com/member/muthukumaru?follow=1"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Follow TechYenthra on F6S"
+                style={{ display: 'inline-flex', alignItems: 'center', transition: 'opacity 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.opacity = '0.75'}
+                onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+              >
+                <img
+                  src="https://www.f6s.com/images/f6s-follow-secondary.png"
+                  alt="Follow TechYenthra on F6S"
+                  style={{ width: '78px', height: '22px', padding: 0, margin: 0, display: 'block' }}
+                />
+              </a>
             </div>
           </div>
         </div>
