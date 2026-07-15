@@ -1,16 +1,25 @@
 import { NavLink } from 'react-router-dom';
-import { Phone, Mail, Share2, Code2, Download } from 'lucide-react';
+import { Phone, Mail, Download } from 'lucide-react';
 import content from '../../content.json';
 
 const serviceLinks = content.services.slice(0, 6).map(s => s.title);
 const quickLinks = content.nav;
 
 const LINKEDIN_URL = 'https://www.linkedin.com/company/techyenthra/';
+const FACEBOOK_URL = 'https://www.facebook.com/techyenthra';
 
 function LinkedInIcon({ size = 16 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
       <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45z" />
+    </svg>
+  );
+}
+
+function FacebookIcon({ size = 16 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
     </svg>
   );
 }
@@ -50,8 +59,7 @@ export default function Footer() {
             <div style={{ display: 'flex', gap: '12px' }}>
               {[
                 { Icon: LinkedInIcon, href: LINKEDIN_URL, external: true },
-                { Icon: Share2, href: '#' },
-                { Icon: Code2, href: '#' },
+                { Icon: FacebookIcon, href: FACEBOOK_URL, external: true },
               ].map(({ Icon, href, external }, i) => (
                 <a
                   key={i}
