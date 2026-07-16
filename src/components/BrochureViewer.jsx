@@ -142,27 +142,34 @@ const ArrowBtn = ({ side, disabled, onClick, children }) => (
 );
 
 export default function BrochureViewer({ isOpen, onClose, startPage = 0 }) {
-  const [size,    setSize]    = useState(() => calcSize());
+  const [size,    setSize]    = useState(null); // null until ratio is known
   const [current, setCurrent] = useState(startPage);
   const bookRef  = useRef(null);
   const ratioRef = useRef(0.63);
 
-  // Detect actual image ratio from first page
+  // Preload first image to get exact ratio, THEN mount the book (prevents layout jump)
   useEffect(() => {
+    let cancelled = false;
     const img = new Image();
     img.onload = () => {
-      if (img.naturalWidth && img.naturalHeight) {
-        ratioRef.current = img.naturalHeight / img.naturalWidth;
-        setSize(calcSize(ratioRef.current));
-      }
+      if (cancelled) return;
+      const ratio = img.naturalWidth && img.naturalHeight
+        ? img.naturalHeight / img.naturalWidth
+        : 0.63;
+      ratioRef.current = ratio;
+      setSize(calcSize(ratio));
     };
+    img.onerror = () => { if (!cancelled) setSize(calcSize()); };
     img.src = PAGES[0];
+    return () => { cancelled = true; };
   }, []);
 
-  // Recalculate on resize
+  // Recalculate on resize (only after ratio is known)
   useEffect(() => {
     if (!isOpen) return;
-    const onResize = () => setSize(calcSize(ratioRef.current));
+    const onResize = () => {
+      if (ratioRef.current) setSize(calcSize(ratioRef.current));
+    };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, [isOpen]);
@@ -190,16 +197,18 @@ export default function BrochureViewer({ isOpen, onClose, startPage = 0 }) {
       {/* Backdrop */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 9990, background: '#04060e' }} />
 
-      {/* Book stage — fills viewport, pages one at a time in landscape */}
+      {/* Book stage — hidden until ratio is known, then fades in */}
       <div style={{
         position: 'fixed', inset: 0, zIndex: 9991,
         display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center',
         padding: `${56 + 8}px 52px 40px`,
         pointerEvents: 'none',
+        opacity: size ? 1 : 0,
+        transition: 'opacity 0.38s ease',
       }}>
         <div style={{ pointerEvents: 'auto' }}>
-          <HTMLFlipBook
+          {size && <HTMLFlipBook
             ref={bookRef}
             width={size.w}
             height={size.h}
@@ -222,7 +231,7 @@ export default function BrochureViewer({ isOpen, onClose, startPage = 0 }) {
             {PAGES.map((src, i) => (
               <Page key={i} src={src} alt={`Page ${i + 1}`} isLast={i === TOTAL - 1} />
             ))}
-          </HTMLFlipBook>
+          </HTMLFlipBook>}
         </div>
 
         {/* Dot strip */}
