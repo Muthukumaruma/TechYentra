@@ -3,8 +3,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, Download, BookOpen } from 'lucide-react';
 
 const TOTAL = 12;
-const PAGES = Array.from({ length: TOTAL }, (_, i) => `/page${i + 1}_compressed.webp`);
-const PDF_URL = '/TY-brouchere.pdf';
+const PAGES = Array.from({ length: TOTAL }, (_, i) => `/broucher/page${i + 1}_compressed.webp`);
+const PDF_URL = '/broucher/TY-brouchere.pdf';
 
 const flipVariants = {
   enter: (d) => ({

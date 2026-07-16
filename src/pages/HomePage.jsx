@@ -84,20 +84,6 @@ export default function HomePage() {
 
         <div className="container" style={{ position: 'relative', zIndex: 1, paddingTop: '120px', paddingBottom: '80px' }}>
           <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
-            {/* Eyebrow */}
-            <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }}>
-              <span style={{
-                display: 'inline-flex', alignItems: 'center', gap: '8px',
-                background: 'rgba(6,182,212,0.1)', border: '1px solid rgba(6,182,212,0.25)',
-                borderRadius: '100px', padding: '6px 18px',
-                fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em',
-                textTransform: 'uppercase', color: '#06b6d4',
-                marginBottom: '24px',
-              }}>
-                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#06b6d4', display: 'inline-block' }} />
-                Next-Generation IT Solutions
-              </span>
-            </motion.div>
 
             {/* Headline */}
             <motion.h1
