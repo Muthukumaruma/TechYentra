@@ -188,7 +188,7 @@ export default function BrochureViewer({ isOpen, onClose }) {
   return (
     <>
       {/* Backdrop */}
-      <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 9990, background: '#04060e' }} />
+      <div style={{ position: 'fixed', inset: 0, zIndex: 9990, background: '#04060e' }} />
 
       {/* Book stage — fills viewport, pages one at a time in landscape */}
       <div style={{
