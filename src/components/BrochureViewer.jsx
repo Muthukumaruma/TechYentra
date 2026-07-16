@@ -1,282 +1,175 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { useMotionValue, useTransform, animate, motion } from 'framer-motion';
+import { useState, useEffect, useRef, useCallback, forwardRef } from 'react';
+import HTMLFlipBook from 'react-pageflip';
 import { X, ChevronLeft, ChevronRight, Download } from 'lucide-react';
 
 const TOTAL = 12;
 const PAGES = Array.from({ length: TOTAL }, (_, i) => `/broucher/page${i + 1}_compressed.webp`);
 const PDF_URL = '/broucher/TY-brouchere.pdf';
 
+// A4 portrait ratio — adjust if your pages differ
+const PAGE_RATIO = 1.414;
+
+function calcSize() {
+  const PAD_W = 100; // left+right margin for arrow buttons
+  const PAD_H = 120; // top bar + bottom dots
+  const vw = Math.max(320, window.innerWidth  - PAD_W);
+  const vh = Math.max(300, window.innerHeight - PAD_H);
+
+  // Two pages side by side in landscape book-spread view
+  let pageW = Math.floor(vw / 2);
+  let pageH = Math.floor(pageW * PAGE_RATIO);
+
+  if (pageH > vh) {
+    pageH = vh;
+    pageW = Math.floor(pageH / PAGE_RATIO);
+  }
+
+  // clamp
+  pageW = Math.max(140, Math.min(pageW, 600));
+  pageH = Math.max(198, Math.min(pageH, 849));
+
+  return { w: pageW, h: pageH };
+}
+
+// react-pageflip needs forwardRef on each page component
+const Page = forwardRef(({ src, alt }, ref) => (
+  <div
+    ref={ref}
+    style={{
+      width: '100%', height: '100%',
+      background: '#fff',
+      overflow: 'hidden',
+      userSelect: 'none',
+    }}
+  >
+    <img
+      src={src}
+      alt={alt}
+      draggable={false}
+      style={{
+        width: '100%', height: '100%',
+        objectFit: 'fill',
+        display: 'block',
+        pointerEvents: 'none',
+      }}
+    />
+  </div>
+));
+
 export default function BrochureViewer({ isOpen, onClose }) {
-  const [page,   setPage]   = useState(0);
-  const [target, setTarget] = useState(null); // page index being flipped to
-  const [origin, setOrigin] = useState('left center');
+  const [size,    setSize]    = useState(calcSize);
+  const [current, setCurrent] = useState(0); // leftmost visible page index
+  const bookRef = useRef(null);
 
-  // angle: 0 = at rest, -180 = forward flip complete, +180 = backward flip complete
-  const angle = useMotionValue(0);
-
-  // Shadow peaks at ±90° (edge-on) and is invisible at rest / complete
-  const shadowOpacity = useTransform(angle, [-180, -90, 0, 90, 180], [0, 0.5, 0, 0.5, 0]);
-
-  const flipping  = useRef(false);
-  const touchX    = useRef(null);
-  const touchT    = useRef(null);
-  const touchDir  = useRef(0); // 1 = forward, -1 = backward
-
-  // ── core flip function (used by buttons + keyboard + swipe snap) ──
-  const doFlip = useCallback((dir) => {
-    const t = page + dir;
-    if (t < 0 || t >= TOTAL || flipping.current) return;
-    flipping.current = true;
-    setOrigin(dir > 0 ? 'left center' : 'right center');
-    setTarget(t);
-    animate(angle, dir > 0 ? -180 : 180, {
-      duration: 0.6,
-      ease: [0.4, 0, 0.2, 1],
-    }).then(() => {
-      setPage(t);
-      setTarget(null);
-      angle.set(0);
-      flipping.current = false;
-    });
-  }, [page, angle]);
-
-  // ── touch: swipe drives the angle live ──
-  const onTouchStart = useCallback((e) => {
-    if (flipping.current) return;
-    touchX.current = e.touches[0].clientX;
-    touchT.current = Date.now();
-    touchDir.current = 0;
-  }, []);
-
-  const onTouchMove = useCallback((e) => {
-    if (touchX.current === null || flipping.current) return;
-    const dx  = e.touches[0].clientX - touchX.current;
-    const pct = Math.min(1, Math.abs(dx) / (window.innerWidth * 0.65));
-
-    if (dx < -8 && page < TOTAL - 1) {
-      touchDir.current = 1;
-      setOrigin('left center');
-      if (target === null) setTarget(page + 1);
-      angle.set(-180 * pct);
-    } else if (dx > 8 && page > 0) {
-      touchDir.current = -1;
-      setOrigin('right center');
-      if (target === null) setTarget(page - 1);
-      angle.set(180 * pct);
-    }
-  }, [page, target, angle]);
-
-  const onTouchEnd = useCallback((e) => {
-    if (touchX.current === null) return;
-    const dx       = e.changedTouches[0].clientX - touchX.current;
-    const velocity = Math.abs(dx) / Math.max(1, Date.now() - touchT.current);
-    const cur      = Math.abs(angle.get());
-    touchX.current = null;
-
-    const commit = cur > 55 || velocity > 0.45;
-
-    if (commit && touchDir.current !== 0 && target !== null) {
-      flipping.current = true;
-      const dest = touchDir.current > 0 ? -180 : 180;
-      animate(angle, dest, { duration: 0.28, ease: 'easeOut' }).then(() => {
-        setPage(target);
-        setTarget(null);
-        angle.set(0);
-        flipping.current = false;
-      });
-    } else {
-      animate(angle, 0, { duration: 0.3, ease: 'easeOut' }).then(() => setTarget(null));
-    }
-    touchDir.current = 0;
-  }, [angle, target]);
-
-  // ── keyboard ──
+  // Recalculate on resize
   useEffect(() => {
-    if (!isOpen) { setPage(0); return; }
+    if (!isOpen) return;
+    const onResize = () => setSize(calcSize());
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [isOpen]);
+
+  // Reset + keyboard
+  useEffect(() => {
+    if (!isOpen) { setCurrent(0); return; }
+
     const h = (e) => {
-      if (e.key === 'ArrowRight') doFlip(1);
-      else if (e.key === 'ArrowLeft') doFlip(-1);
-      else if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        bookRef.current?.pageFlip().flipNext('top');
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        bookRef.current?.pageFlip().flipPrev('top');
+      } else if (e.key === 'Escape') {
+        onClose();
+      }
     };
     window.addEventListener('keydown', h);
     document.body.style.overflow = 'hidden';
-    return () => { window.removeEventListener('keydown', h); document.body.style.overflow = ''; };
-  }, [isOpen, doFlip, onClose]);
+    return () => {
+      window.removeEventListener('keydown', h);
+      document.body.style.overflow = '';
+    };
+  }, [isOpen, onClose]);
+
+  const handleFlip = useCallback((e) => setCurrent(e.data), []);
+
+  const flipPrev = () => bookRef.current?.pageFlip().flipPrev('top');
+  const flipNext = () => bookRef.current?.pageFlip().flipNext('top');
+  const goTo     = (i) => bookRef.current?.pageFlip().flip(i, 'top');
 
   if (!isOpen) return null;
 
-  const destIndex = target ?? page;
+  const spread     = Math.floor(current / 2); // which "spread" (pair) we're on
+  const totalSpreads = Math.ceil(TOTAL / 2);
+  const atStart    = current === 0;
+  const atEnd      = current >= TOTAL - 2;
 
   return (
     <>
-      {/* Dark stage */}
+      {/* Dark stage — click outside to close */}
       <div
         onClick={onClose}
-        style={{ position: 'fixed', inset: 0, zIndex: 9990, background: '#060912' }}
+        style={{ position: 'fixed', inset: 0, zIndex: 9990, background: '#05080f' }}
       />
 
-      {/* Full-screen viewer */}
-      <div
-        style={{
-          position: 'fixed', inset: 0, zIndex: 9991,
-          display: 'flex', flexDirection: 'column',
-          alignItems: 'center', justifyContent: 'center',
-          padding: '52px 68px 44px',
-        }}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
-      >
-        {/* ── Book stage ── */}
-        <div style={{
-          position: 'relative',
-          flex: 1, minHeight: 0,
-          width: '100%',
-          perspective: '2200px',
-          perspectiveOrigin: '50% 50%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-
-          {/* ── Layer 0: destination page (sits beneath, revealed by flip) ── */}
-          <img
-            src={PAGES[destIndex]}
-            alt=""
-            aria-hidden
-            draggable={false}
+      {/* Full-screen layout */}
+      <div style={{
+        position: 'fixed', inset: 0, zIndex: 9991,
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center',
+        padding: '64px 52px 48px',
+        pointerEvents: 'none', // children re-enable where needed
+      }}>
+        {/* Book */}
+        <div style={{ pointerEvents: 'auto', position: 'relative' }}>
+          <HTMLFlipBook
+            ref={bookRef}
+            width={size.w}
+            height={size.h}
+            size="fixed"
+            minWidth={140}
+            maxWidth={600}
+            minHeight={198}
+            maxHeight={849}
+            drawShadow
+            flippingTime={650}
+            useMouseEvents
+            swipeDistance={20}
+            mobileScrollSupport={false}
+            showCover={false}
+            startPage={0}
+            onFlip={handleFlip}
             style={{
-              maxHeight: '100%',
-              maxWidth: '100%',
-              width: 'auto', height: 'auto',
-              display: 'block',
-              userSelect: 'none',
-              boxShadow: '0 24px 80px rgba(0,0,0,0.85)',
-              borderRadius: '3px',
-            }}
-          />
-
-          {/* ── Layer 1: flipping card (front = current page, back = dest page) ── */}
-          <motion.div
-            style={{
-              position: 'absolute', inset: 0,
-              transformStyle: 'preserve-3d',
-              rotateY: angle,
-              transformOrigin: origin,
+              boxShadow: '0 32px 100px rgba(0,0,0,0.85), 0 8px 24px rgba(0,0,0,0.6)',
             }}
           >
-            {/* Front face — current page */}
-            <div style={{
-              position: 'absolute', inset: 0,
-              backfaceVisibility: 'hidden',
-              WebkitBackfaceVisibility: 'hidden',
-              borderRadius: '3px',
-              overflow: 'hidden',
-            }}>
-              <img
-                src={PAGES[page]}
-                alt={`Page ${page + 1}`}
-                draggable={false}
-                style={{
-                  width: '100%', height: '100%',
-                  objectFit: 'contain',
-                  display: 'block',
-                  userSelect: 'none',
-                }}
-              />
-              {/* Page-edge shadow (grows as page bends toward spine) */}
-              <motion.div style={{
-                position: 'absolute', inset: 0,
-                background: origin === 'left center'
-                  ? 'linear-gradient(to left, rgba(0,0,0,0.55) 0%, transparent 55%)'
-                  : 'linear-gradient(to right, rgba(0,0,0,0.55) 0%, transparent 55%)',
-                opacity: shadowOpacity,
-                pointerEvents: 'none',
-              }} />
-            </div>
-
-            {/* Back face — destination page */}
-            <div style={{
-              position: 'absolute', inset: 0,
-              backfaceVisibility: 'hidden',
-              WebkitBackfaceVisibility: 'hidden',
-              transform: 'rotateY(180deg)',
-              borderRadius: '3px',
-              overflow: 'hidden',
-            }}>
-              <img
-                src={PAGES[destIndex]}
-                alt={`Page ${destIndex + 1}`}
-                draggable={false}
-                style={{
-                  width: '100%', height: '100%',
-                  objectFit: 'contain',
-                  display: 'block',
-                  userSelect: 'none',
-                }}
-              />
-              {/* Shadow on back face (mirror direction) */}
-              <motion.div style={{
-                position: 'absolute', inset: 0,
-                background: origin === 'left center'
-                  ? 'linear-gradient(to right, rgba(0,0,0,0.45) 0%, transparent 55%)'
-                  : 'linear-gradient(to left, rgba(0,0,0,0.45) 0%, transparent 55%)',
-                opacity: shadowOpacity,
-                pointerEvents: 'none',
-              }} />
-            </div>
-          </motion.div>
-
-          {/* ── Nav arrows (overlaid on stage) ── */}
-          {[
-            { dir: -1, side: 'left',  Icon: ChevronLeft,  can: page > 0 },
-            { dir:  1, side: 'right', Icon: ChevronRight, can: page < TOTAL - 1 },
-          ].map(({ dir, side, Icon, can }) => (
-            <button
-              key={side}
-              onClick={() => doFlip(dir)}
-              aria-label={dir > 0 ? 'Next page' : 'Previous page'}
-              style={{
-                position: 'absolute',
-                [side]: '-52px',
-                top: '50%', transform: 'translateY(-50%)',
-                width: '40px', height: '40px', borderRadius: '50%',
-                background: 'rgba(12,18,36,0.8)',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                color: can ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.15)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                cursor: can ? 'pointer' : 'default',
-                transition: 'all 0.18s',
-              }}
-              onMouseEnter={e => { if (can) { e.currentTarget.style.background = 'rgba(6,182,212,0.22)'; e.currentTarget.style.borderColor = 'rgba(6,182,212,0.45)'; e.currentTarget.style.color = '#06b6d4'; } }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(12,18,36,0.8)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = can ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.15)'; }}
-            >
-              <Icon size={20} />
-            </button>
-          ))}
+            {PAGES.map((src, i) => (
+              <Page key={i} src={src} alt={`Page ${i + 1}`} />
+            ))}
+          </HTMLFlipBook>
         </div>
 
-        {/* ── Dot strip ── */}
+        {/* Dot strip — one dot per spread */}
         <div style={{
+          pointerEvents: 'auto',
           display: 'flex', gap: '5px', alignItems: 'center',
-          marginTop: '14px', flexShrink: 0,
+          marginTop: '18px',
         }}>
-          {PAGES.map((_, i) => (
+          {Array.from({ length: totalSpreads }, (_, i) => (
             <button
               key={i}
-              onClick={() => !flipping.current && i !== page && doFlip(i > page ? 1 : -1)}
-              aria-label={`Page ${i + 1}`}
+              onClick={() => goTo(i * 2)}
+              aria-label={`Pages ${i * 2 + 1}–${Math.min(i * 2 + 2, TOTAL)}`}
               style={{
                 height: '5px',
-                width: i === page ? '18px' : '5px',
+                width: spread === i ? '22px' : '5px',
                 borderRadius: '3px',
-                background: i === page
+                background: spread === i
                   ? 'linear-gradient(90deg,#1d4ed8,#06b6d4)'
-                  : 'rgba(255,255,255,0.2)',
+                  : 'rgba(255,255,255,0.22)',
                 border: 'none', padding: 0,
-                cursor: i === page ? 'default' : 'pointer',
+                cursor: spread === i ? 'default' : 'pointer',
                 transition: 'all 0.28s ease',
                 flexShrink: 0,
               }}
@@ -285,33 +178,34 @@ export default function BrochureViewer({ isOpen, onClose }) {
         </div>
       </div>
 
-      {/* ── Floating top bar (above the viewer) ── */}
+      {/* Top bar */}
       <div style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9992,
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         padding: '10px 14px',
-        background: 'linear-gradient(to bottom, rgba(6,9,18,0.9) 0%, transparent 100%)',
+        background: 'linear-gradient(to bottom, rgba(5,8,15,0.95) 0%, transparent 100%)',
         pointerEvents: 'none',
       }}>
-        {/* Page counter */}
+        {/* Page counter pill */}
         <div style={{
-          display: 'flex', alignItems: 'center', gap: '8px',
-          background: 'rgba(12,18,36,0.75)',
+          display: 'flex', alignItems: 'center', gap: '6px',
+          background: 'rgba(12,18,36,0.8)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
           border: '1px solid rgba(255,255,255,0.1)',
           borderRadius: '100px', padding: '5px 14px',
           pointerEvents: 'auto',
         }}>
-          <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-            Page
+          <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+            Pages
           </span>
           <span style={{ color: '#06b6d4', fontSize: '12px', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>
-            {page + 1} <span style={{ color: 'rgba(255,255,255,0.25)' }}>/ {TOTAL}</span>
+            {current + 1}–{Math.min(current + 2, TOTAL)}
+            <span style={{ color: 'rgba(255,255,255,0.25)' }}> / {TOTAL}</span>
           </span>
         </div>
 
-        {/* Download + Close */}
+        {/* Download + close */}
         <div style={{ display: 'flex', gap: '8px', pointerEvents: 'auto' }}>
           <a
             href={PDF_URL}
@@ -319,42 +213,77 @@ export default function BrochureViewer({ isOpen, onClose }) {
             onClick={e => e.stopPropagation()}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '6px',
-              padding: '7px 15px', borderRadius: '8px',
+              padding: '7px 16px', borderRadius: '8px',
               background: 'linear-gradient(135deg,#1d4ed8,#06b6d4)',
               color: '#fff', fontSize: '12px', fontWeight: 600,
               textDecoration: 'none',
               boxShadow: '0 4px 14px rgba(29,78,216,0.4)',
-              transition: 'opacity 0.2s',
             }}
-            onMouseEnter={e => e.currentTarget.style.opacity = '0.82'}
-            onMouseLeave={e => e.currentTarget.style.opacity = '1'}
           >
             <Download size={13} /> Download PDF
           </a>
           <button
             onClick={onClose}
-            aria-label="Close"
+            aria-label="Close brochure"
             style={{
               width: '34px', height: '34px', borderRadius: '8px',
-              background: 'rgba(12,18,36,0.75)',
+              background: 'rgba(12,18,36,0.8)',
               backdropFilter: 'blur(10px)',
               WebkitBackdropFilter: 'blur(10px)',
               border: '1px solid rgba(255,255,255,0.12)',
               color: 'rgba(255,255,255,0.7)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', transition: 'all 0.18s',
+              cursor: 'pointer',
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; e.currentTarget.style.color = '#fff'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(12,18,36,0.75)'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; }}
           >
             <X size={15} />
           </button>
         </div>
       </div>
 
-      {/* Preload neighbours silently */}
-      {[page - 1, page + 1].filter(p => p >= 0 && p < TOTAL).map(p => (
-        <img key={p} src={PAGES[p]} alt="" style={{ display: 'none' }} aria-hidden />
+      {/* Left arrow */}
+      <button
+        onClick={flipPrev}
+        aria-label="Previous pages"
+        style={{
+          position: 'fixed', left: '10px', top: '50%', transform: 'translateY(-50%)',
+          zIndex: 9992,
+          width: '40px', height: '40px', borderRadius: '50%',
+          background: 'rgba(12,18,36,0.8)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          border: '1px solid rgba(255,255,255,0.1)',
+          color: atStart ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.8)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: atStart ? 'default' : 'pointer',
+        }}
+      >
+        <ChevronLeft size={20} />
+      </button>
+
+      {/* Right arrow */}
+      <button
+        onClick={flipNext}
+        aria-label="Next pages"
+        style={{
+          position: 'fixed', right: '10px', top: '50%', transform: 'translateY(-50%)',
+          zIndex: 9992,
+          width: '40px', height: '40px', borderRadius: '50%',
+          background: 'rgba(12,18,36,0.8)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          border: '1px solid rgba(255,255,255,0.1)',
+          color: atEnd ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.8)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: atEnd ? 'default' : 'pointer',
+        }}
+      >
+        <ChevronRight size={20} />
+      </button>
+
+      {/* Silent preload of all pages */}
+      {PAGES.map((src, i) => (
+        <img key={i} src={src} alt="" style={{ display: 'none' }} aria-hidden />
       ))}
     </>
   );
