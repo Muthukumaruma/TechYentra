@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
 import { ArrowRight, CheckCircle2, Zap, Shield, Globe, Brain, Cpu, BarChart3, CheckCheck, ExternalLink, Download } from 'lucide-react';
 import ParticleField from '../components/ParticleField';
+import BrochureViewer from '../components/BrochureViewer';
 import SEO from '../components/SEO';
 import SectionHeader from '../components/ui/SectionHeader';
 import AnimatedCounter from '../components/ui/AnimatedCounter';
@@ -43,8 +45,10 @@ const HOME_SCHEMA = {
 };
 
 export default function HomePage() {
+  const [brochureOpen, setBrochureOpen] = useState(false);
   return (
     <div className="page-wrapper" style={{ paddingTop: 0 }}>
+      <BrochureViewer isOpen={brochureOpen} onClose={() => setBrochureOpen(false)} />
       <SEO
         path="/"
         description="TechYenthra Technologies – India's trusted software development company. We build AI platforms, web & mobile apps, OTT streaming, travel tech, and enterprise solutions. 50+ projects delivered."
@@ -170,22 +174,21 @@ export default function HomePage() {
                   View Our Work
                 </motion.div>
               </NavLink>
-              <a href={content.company.companyProfile} download="TechYenthra-Company-Profile.pdf">
-                <motion.div
-                  whileHover={{ scale: 1.04, y: -2 }}
-                  whileTap={{ scale: 0.97 }}
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', gap: '8px',
-                    padding: '15px 28px', borderRadius: '12px',
-                    background: 'rgba(6,182,212,0.1)',
-                    border: '1px solid rgba(6,182,212,0.3)',
-                    color: '#06b6d4', fontWeight: 600, fontSize: '15px',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <Download size={16} /> Company Profile
-                </motion.div>
-              </a>
+              <motion.button
+                whileHover={{ scale: 1.04, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => setBrochureOpen(true)}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '8px',
+                  padding: '15px 28px', borderRadius: '12px',
+                  background: 'rgba(6,182,212,0.1)',
+                  border: '1px solid rgba(6,182,212,0.3)',
+                  color: '#06b6d4', fontWeight: 600, fontSize: '15px',
+                  cursor: 'pointer',
+                }}
+              >
+                <Download size={16} /> Company Profile
+              </motion.button>
             </motion.div>
 
           </div>
@@ -506,7 +509,7 @@ export default function HomePage() {
                   {content.company.phone}
                 </Button>
               </a>
-              <a href={content.company.companyProfile} download="TechYenthra-Company-Profile.pdf">
+              <button onClick={() => setBrochureOpen(true)} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
                 <Button size="lg" icon={<Download size={16} />} style={{
                   background: 'rgba(6,182,212,0.12)',
                   border: '1px solid rgba(6,182,212,0.3)',
@@ -514,7 +517,7 @@ export default function HomePage() {
                 }}>
                   Company Profile
                 </Button>
-              </a>
+              </button>
             </div>
           </motion.div>
         </div>
