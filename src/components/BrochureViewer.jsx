@@ -25,12 +25,84 @@ function calcSize(ratio = 0.63) {
   return { w: Math.max(280, w), h: Math.max(180, h) };
 }
 
-const Page = forwardRef(({ src, alt }, ref) => (
-  <div ref={ref} style={{ width: '100%', height: '100%', background: '#fff', overflow: 'hidden', userSelect: 'none' }}>
+// Sparkle positions as [x%, y%] — placed in the empty white areas of the last page
+const SPARKLES = [
+  [8,  12, 7,  0.0, 2.8], [22, 6,  5,  0.6, 3.2], [38, 18, 9,  1.1, 2.5],
+  [12, 32, 6,  1.8, 3.6], [30, 28, 4,  0.4, 2.2], [48, 8,  8,  2.2, 3.0],
+  [55, 22, 5,  0.9, 2.7], [6,  50, 6,  1.4, 3.4], [18, 58, 4,  0.2, 2.4],
+  [42, 40, 7,  1.7, 3.1], [28, 48, 5,  2.5, 2.9], [62, 35, 6,  0.7, 3.3],
+  [15, 72, 8,  1.2, 2.6], [35, 65, 4,  2.0, 3.0], [50, 55, 5,  0.5, 2.8],
+  [70, 15, 6,  1.6, 3.5], [74, 45, 4,  0.3, 2.3],
+];
+
+function ThankYouSparkles() {
+  return (
+    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 2, overflow: 'hidden' }}>
+      <style>{`
+        @keyframes ty-twinkle {
+          0%,100% { opacity:0; transform:scale(0.4) rotate(0deg); }
+          40%      { opacity:1; transform:scale(1.1) rotate(20deg); }
+          60%      { opacity:0.85; transform:scale(1) rotate(-10deg); }
+        }
+        @keyframes ty-rise {
+          0%   { opacity:0; transform:translateY(0) scale(0.6); }
+          15%  { opacity:1; }
+          85%  { opacity:0.5; }
+          100% { opacity:0; transform:translateY(-32px) scale(0.2); }
+        }
+        @keyframes ty-pulse {
+          0%,100% { opacity:0.1; transform:scale(1); }
+          50%     { opacity:0.35; transform:scale(1.08); }
+        }
+      `}</style>
+
+      {/* Sparkle stars */}
+      {SPARKLES.map(([x, y, size, delay, dur], i) => (
+        <div key={i} style={{
+          position: 'absolute',
+          left: `${x}%`, top: `${y}%`,
+          width: `${size}px`, height: `${size}px`,
+          animation: `ty-twinkle ${dur}s ${delay}s ease-in-out infinite`,
+          fontSize: `${size + 2}px`,
+          lineHeight: 1,
+          color: i % 3 === 0 ? '#1d4ed8' : i % 3 === 1 ? '#06b6d4' : '#93c5fd',
+          textShadow: `0 0 6px currentColor`,
+          userSelect: 'none',
+        }}>✦</div>
+      ))}
+
+      {/* Larger slow-rising orbs for depth */}
+      {[[10,25],[40,60],[20,80],[58,42]].map(([x,y],i) => (
+        <div key={`o${i}`} style={{
+          position: 'absolute',
+          left: `${x}%`, top: `${y}%`,
+          width: '6px', height: '6px', borderRadius: '50%',
+          background: i % 2 === 0 ? '#3b82f6' : '#06b6d4',
+          boxShadow: `0 0 10px 3px ${i % 2 === 0 ? '#3b82f633' : '#06b6d433'}`,
+          animation: `ty-rise ${3.5 + i * 0.4}s ${i * 0.7}s ease-in-out infinite`,
+        }} />
+      ))}
+
+      {/* Subtle radial glow in the large empty top-center area */}
+      <div style={{
+        position: 'absolute',
+        left: '30%', top: '5%',
+        width: '40%', height: '45%',
+        background: 'radial-gradient(ellipse at 50% 40%, rgba(99,179,237,0.08) 0%, transparent 70%)',
+        animation: 'ty-pulse 4s 0s ease-in-out infinite',
+        pointerEvents: 'none',
+      }} />
+    </div>
+  );
+}
+
+const Page = forwardRef(({ src, alt, isLast }, ref) => (
+  <div ref={ref} style={{ width: '100%', height: '100%', background: '#fff', overflow: 'hidden', userSelect: 'none', position: 'relative' }}>
     <img
       src={src} alt={alt} draggable={false}
       style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', pointerEvents: 'none' }}
     />
+    {isLast && <ThankYouSparkles />}
   </div>
 ));
 
@@ -148,7 +220,7 @@ export default function BrochureViewer({ isOpen, onClose }) {
             style={{ boxShadow: '0 20px 80px rgba(0,0,0,0.7), 0 4px 20px rgba(0,0,0,0.4)' }}
           >
             {PAGES.map((src, i) => (
-              <Page key={i} src={src} alt={`Page ${i + 1}`} />
+              <Page key={i} src={src} alt={`Page ${i + 1}`} isLast={i === TOTAL - 1} />
             ))}
           </HTMLFlipBook>
         </div>
