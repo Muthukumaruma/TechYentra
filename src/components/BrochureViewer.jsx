@@ -1,6 +1,9 @@
-import { useState, useEffect, useRef, forwardRef } from 'react';
+import { useState, useEffect, useRef, useCallback, forwardRef } from 'react';
 import HTMLFlipBook from 'react-pageflip';
-import { X, ChevronLeft, ChevronRight, Download } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Download, ZoomIn } from 'lucide-react';
+
+const LENS_SIZE = 190; // px — diameter of the magnifying glass
+const ZOOM      = 3;   // magnification factor
 
 const TOTAL = 12;
 const PAGES = Array.from({ length: TOTAL }, (_, i) => `/broucher/page${i + 1}_compressed.webp`);
@@ -142,10 +145,35 @@ const ArrowBtn = ({ side, disabled, onClick, children }) => (
 );
 
 export default function BrochureViewer({ isOpen, onClose, startPage = 0 }) {
-  const [size,    setSize]    = useState(null); // null until ratio is known
-  const [current, setCurrent] = useState(startPage);
-  const bookRef  = useRef(null);
-  const ratioRef = useRef(0.63);
+  const [size,     setSize]     = useState(null);
+  const [current,  setCurrent]  = useState(startPage);
+  const [lensMode, setLensMode] = useState(false);
+  const [lensPos,  setLensPos]  = useState(null);
+  const bookRef          = useRef(null);
+  const bookContainerRef = useRef(null);
+  const ratioRef         = useRef(0.63);
+
+  // ── lens helpers ──
+  const trackLens = useCallback((clientX, clientY) => {
+    const rect = bookContainerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    setLensPos({
+      cx: clientX - rect.left,
+      cy: clientY - rect.top,
+      clientX,
+      clientY,
+      w: rect.width,
+      h: rect.height,
+    });
+  }, []);
+
+  const onLensMouseMove  = useCallback((e) => trackLens(e.clientX, e.clientY), [trackLens]);
+  const onLensTouchMove  = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    trackLens(e.touches[0].clientX, e.touches[0].clientY);
+  }, [trackLens]);
+  const hideLens = useCallback(() => setLensPos(null), []);
 
   // Preload first image to get exact ratio, THEN mount the book (prevents layout jump)
   useEffect(() => {
@@ -207,7 +235,8 @@ export default function BrochureViewer({ isOpen, onClose, startPage = 0 }) {
         opacity: size ? 1 : 0,
         transition: 'opacity 0.38s ease',
       }}>
-        <div style={{ pointerEvents: 'auto' }}>
+        {/* Book + lens overlay */}
+        <div ref={bookContainerRef} style={{ pointerEvents: 'auto', position: 'relative' }}>
           {size && <HTMLFlipBook
             ref={bookRef}
             width={size.w}
@@ -217,10 +246,10 @@ export default function BrochureViewer({ isOpen, onClose, startPage = 0 }) {
             maxWidth={1500}
             minHeight={180}
             maxHeight={900}
-            usePortrait        /* single page at a time — each landscape page fills the screen */
+            usePortrait
             drawShadow
             flippingTime={600}
-            useMouseEvents
+            useMouseEvents={!lensMode}   /* disable drag-to-flip while lens is active */
             swipeDistance={25}
             mobileScrollSupport={false}
             showCover={false}
@@ -232,6 +261,21 @@ export default function BrochureViewer({ isOpen, onClose, startPage = 0 }) {
               <Page key={i} src={src} alt={`Page ${i + 1}`} isLast={i === TOTAL - 1} />
             ))}
           </HTMLFlipBook>}
+
+          {/* Capture layer — intercepts mouse/touch for lens tracking */}
+          {lensMode && size && (
+            <div
+              style={{
+                position: 'absolute', inset: 0,
+                zIndex: 10,
+                cursor: 'none',  /* hide cursor; the lens is the cursor */
+              }}
+              onMouseMove={onLensMouseMove}
+              onMouseLeave={hideLens}
+              onTouchMove={onLensTouchMove}
+              onTouchEnd={hideLens}
+            />
+          )}
         </div>
 
         {/* Dot strip */}
@@ -283,6 +327,25 @@ export default function BrochureViewer({ isOpen, onClose, startPage = 0 }) {
         </div>
 
         <div style={{ display: 'flex', gap: '8px', pointerEvents: 'auto' }}>
+          {/* Magnifier toggle */}
+          <button
+            onClick={() => { setLensMode(m => !m); setLensPos(null); }}
+            aria-label={lensMode ? 'Exit zoom' : 'Zoom to read'}
+            title={lensMode ? 'Exit zoom (hover to see)' : 'Zoom lens — hover over page to read small text'}
+            style={{
+              width: '34px', height: '34px', borderRadius: '8px',
+              background: lensMode ? 'rgba(6,182,212,0.22)' : 'rgba(10,15,30,0.8)',
+              backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+              border: `1px solid ${lensMode ? 'rgba(6,182,212,0.55)' : 'rgba(255,255,255,0.12)'}`,
+              color: lensMode ? '#06b6d4' : 'rgba(255,255,255,0.7)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'all 0.18s',
+            }}
+          >
+            <ZoomIn size={15} />
+          </button>
+
           <a
             href={PDF_URL}
             download="TechYenthra-Company-Profile.pdf"
@@ -319,6 +382,66 @@ export default function BrochureViewer({ isOpen, onClose, startPage = 0 }) {
       {/* Arrow buttons */}
       <ArrowBtn side="left"  disabled={atStart} onClick={() => bookRef.current?.pageFlip().flipPrev('top')}><ChevronLeft  size={20} /></ArrowBtn>
       <ArrowBtn side="right" disabled={atEnd}   onClick={() => bookRef.current?.pageFlip().flipNext('top')}><ChevronRight size={20} /></ArrowBtn>
+
+      {/* ── Magnifier lens ── */}
+      {lensMode && lensPos && (() => {
+        // bg position: center the zoomed area under the cursor inside the lens circle
+        const bgX = LENS_SIZE / 2 - lensPos.cx * ZOOM;
+        const bgY = LENS_SIZE / 2 - lensPos.cy * ZOOM;
+        return (
+          <div
+            aria-hidden
+            style={{
+              position: 'fixed',
+              left: lensPos.clientX - LENS_SIZE / 2,
+              top:  lensPos.clientY - LENS_SIZE / 2,
+              width:  LENS_SIZE,
+              height: LENS_SIZE,
+              borderRadius: '50%',
+              overflow: 'hidden',
+              pointerEvents: 'none',
+              zIndex: 9999,
+              backgroundImage:    `url(${PAGES[current]})`,
+              backgroundRepeat:   'no-repeat',
+              backgroundSize:     `${lensPos.w * ZOOM}px ${lensPos.h * ZOOM}px`,
+              backgroundPosition: `${bgX}px ${bgY}px`,
+              border: '2.5px solid rgba(6,182,212,0.85)',
+              boxShadow: '0 0 0 1px rgba(255,255,255,0.15), 0 10px 40px rgba(0,0,0,0.7)',
+              /* cross-hair marker at lens center */
+              outline: 'none',
+            }}
+          >
+            {/* subtle cross-hair */}
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              backgroundImage: `
+                linear-gradient(rgba(6,182,212,0.35) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.35) 1px, transparent 1px)
+              `,
+              backgroundSize: `${LENS_SIZE}px ${LENS_SIZE}px`,
+              backgroundPosition: `${LENS_SIZE / 2 - 0.5}px 0, 0 ${LENS_SIZE / 2 - 0.5}px`,
+              pointerEvents: 'none',
+            }} />
+          </div>
+        );
+      })()}
+
+      {/* Hint strip when lens first activated */}
+      {lensMode && !lensPos && (
+        <div style={{
+          position: 'fixed', bottom: '60px', left: '50%', transform: 'translateX(-50%)',
+          zIndex: 9993,
+          background: 'rgba(6,182,212,0.15)',
+          backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+          border: '1px solid rgba(6,182,212,0.3)',
+          borderRadius: '100px', padding: '7px 18px',
+          color: 'rgba(255,255,255,0.7)', fontSize: '12px', fontWeight: 500,
+          whiteSpace: 'nowrap', pointerEvents: 'none',
+        }}>
+          Hover / touch over the page to zoom in
+        </div>
+      )}
 
       {/* Silent preload all pages */}
       {PAGES.map((src, i) => <img key={i} src={src} alt="" style={{ display: 'none' }} aria-hidden />)}
