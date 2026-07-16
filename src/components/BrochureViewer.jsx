@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, forwardRef } from 'react';
+import { useState, useEffect, useRef, forwardRef } from 'react';
 import HTMLFlipBook from 'react-pageflip';
 import { X, ChevronLeft, ChevronRight, Download } from 'lucide-react';
 
@@ -6,59 +6,76 @@ const TOTAL = 12;
 const PAGES = Array.from({ length: TOTAL }, (_, i) => `/broucher/page${i + 1}_compressed.webp`);
 const PDF_URL = '/broucher/TY-brouchere.pdf';
 
-function calcSize(ratio = 1.414) {
-  const PAD_W = 100;
-  const PAD_H = 120;
-  const vw = Math.max(320, window.innerWidth  - PAD_W);
-  const vh = Math.max(300, window.innerHeight - PAD_H);
+// Fit the page to fill the viewport (landscape orientation by default)
+function calcSize(ratio = 0.63) {
+  const ARROW_PAD = 104; // 52px per side for arrow buttons
+  const TOP_BAR   = 56;
+  const DOTS_STRIP = 40;
+  const vw = Math.max(320, window.innerWidth  - ARROW_PAD);
+  const vh = Math.max(220, window.innerHeight - TOP_BAR - DOTS_STRIP);
 
-  // Two pages side by side
-  let pageW = Math.floor(vw / 2);
-  let pageH = Math.floor(pageW * ratio);
+  let w = vw;
+  let h = Math.round(w * ratio);
 
-  if (pageH > vh) {
-    pageH = vh;
-    pageW = Math.floor(pageH / ratio);
+  if (h > vh) {
+    h = vh;
+    w = Math.round(h / ratio);
   }
 
-  pageW = Math.max(140, Math.min(pageW, 620));
-  pageH = Math.max(180, Math.min(pageH, 900));
-
-  return { w: pageW, h: pageH };
+  return { w: Math.max(280, w), h: Math.max(180, h) };
 }
 
-// react-pageflip needs forwardRef on each page component
 const Page = forwardRef(({ src, alt }, ref) => (
-  <div
-    ref={ref}
-    style={{
-      width: '100%', height: '100%',
-      background: '#fff',
-      overflow: 'hidden',
-      userSelect: 'none',
-    }}
-  >
+  <div ref={ref} style={{ width: '100%', height: '100%', background: '#fff', overflow: 'hidden', userSelect: 'none' }}>
     <img
-      src={src}
-      alt={alt}
-      draggable={false}
-      style={{
-        width: '100%', height: '100%',
-        objectFit: 'contain',
-        display: 'block',
-        pointerEvents: 'none',
-      }}
+      src={src} alt={alt} draggable={false}
+      style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', pointerEvents: 'none' }}
     />
   </div>
 ));
+
+const ArrowBtn = ({ side, disabled, onClick, children }) => (
+  <button
+    onClick={onClick}
+    aria-label={side === 'left' ? 'Previous page' : 'Next page'}
+    style={{
+      position: 'fixed',
+      [side]: '10px',
+      top: '50%', transform: 'translateY(-50%)',
+      zIndex: 9992,
+      width: '44px', height: '44px', borderRadius: '50%',
+      background: 'rgba(10,15,30,0.85)',
+      backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+      border: `1px solid ${disabled ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.12)'}`,
+      color: disabled ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.8)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      cursor: disabled ? 'default' : 'pointer',
+      transition: 'all 0.18s',
+    }}
+    onMouseEnter={e => {
+      if (!disabled) {
+        e.currentTarget.style.background    = 'rgba(6,182,212,0.18)';
+        e.currentTarget.style.borderColor   = 'rgba(6,182,212,0.45)';
+        e.currentTarget.style.color         = '#06b6d4';
+      }
+    }}
+    onMouseLeave={e => {
+      e.currentTarget.style.background    = 'rgba(10,15,30,0.85)';
+      e.currentTarget.style.borderColor   = disabled ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.12)';
+      e.currentTarget.style.color         = disabled ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.8)';
+    }}
+  >
+    {children}
+  </button>
+);
 
 export default function BrochureViewer({ isOpen, onClose }) {
   const [size,    setSize]    = useState(() => calcSize());
   const [current, setCurrent] = useState(0);
   const bookRef  = useRef(null);
-  const ratioRef = useRef(1.414);
+  const ratioRef = useRef(0.63);
 
-  // Detect real image ratio from first page, then recalc size
+  // Detect actual image ratio from first page
   useEffect(() => {
     const img = new Image();
     img.onload = () => {
@@ -78,80 +95,57 @@ export default function BrochureViewer({ isOpen, onClose }) {
     return () => window.removeEventListener('resize', onResize);
   }, [isOpen]);
 
-  // Reset + keyboard
+  // Keyboard + scroll lock
   useEffect(() => {
     if (!isOpen) { setCurrent(0); return; }
-
     const h = (e) => {
-      if (e.key === 'ArrowRight' || e.key === ' ') {
-        e.preventDefault();
-        bookRef.current?.pageFlip().flipNext('top');
-      } else if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        bookRef.current?.pageFlip().flipPrev('top');
-      } else if (e.key === 'Escape') {
-        onClose();
-      }
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); bookRef.current?.pageFlip().flipNext('top'); }
+      else if (e.key === 'ArrowLeft')               { e.preventDefault(); bookRef.current?.pageFlip().flipPrev('top'); }
+      else if (e.key === 'Escape')                   onClose();
     };
     window.addEventListener('keydown', h);
     document.body.style.overflow = 'hidden';
-    return () => {
-      window.removeEventListener('keydown', h);
-      document.body.style.overflow = '';
-    };
+    return () => { window.removeEventListener('keydown', h); document.body.style.overflow = ''; };
   }, [isOpen, onClose]);
-
-  const handleFlip = useCallback((e) => setCurrent(e.data), []);
-
-  const flipPrev = () => bookRef.current?.pageFlip().flipPrev('top');
-  const flipNext = () => bookRef.current?.pageFlip().flipNext('top');
-  const goTo     = (i) => bookRef.current?.pageFlip().flip(i, 'top');
 
   if (!isOpen) return null;
 
-  const spread     = Math.floor(current / 2); // which "spread" (pair) we're on
-  const totalSpreads = Math.ceil(TOTAL / 2);
-  const atStart    = current === 0;
-  const atEnd      = current >= TOTAL - 2;
+  const atStart = current === 0;
+  const atEnd   = current === TOTAL - 1;
 
   return (
     <>
-      {/* Dark stage — click outside to close */}
-      <div
-        onClick={onClose}
-        style={{ position: 'fixed', inset: 0, zIndex: 9990, background: '#05080f' }}
-      />
+      {/* Backdrop */}
+      <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 9990, background: '#04060e' }} />
 
-      {/* Full-screen layout */}
+      {/* Book stage — fills viewport, pages one at a time in landscape */}
       <div style={{
         position: 'fixed', inset: 0, zIndex: 9991,
         display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center',
-        padding: '64px 52px 48px',
-        pointerEvents: 'none', // children re-enable where needed
+        padding: `${56 + 8}px 52px 40px`,
+        pointerEvents: 'none',
       }}>
-        {/* Book */}
-        <div style={{ pointerEvents: 'auto', position: 'relative' }}>
+        <div style={{ pointerEvents: 'auto' }}>
           <HTMLFlipBook
             ref={bookRef}
             width={size.w}
             height={size.h}
             size="fixed"
-            minWidth={140}
-            maxWidth={600}
-            minHeight={198}
-            maxHeight={849}
+            minWidth={280}
+            maxWidth={1500}
+            minHeight={180}
+            maxHeight={900}
+            usePortrait        /* single page at a time — each landscape page fills the screen */
             drawShadow
-            flippingTime={650}
+            flippingTime={600}
             useMouseEvents
-            swipeDistance={20}
+            swipeDistance={25}
             mobileScrollSupport={false}
             showCover={false}
             startPage={0}
-            onFlip={handleFlip}
-            style={{
-              boxShadow: '0 32px 100px rgba(0,0,0,0.85), 0 8px 24px rgba(0,0,0,0.6)',
-            }}
+            onFlip={(e) => setCurrent(e.data)}
+            style={{ boxShadow: '0 20px 80px rgba(0,0,0,0.7), 0 4px 20px rgba(0,0,0,0.4)' }}
           >
             {PAGES.map((src, i) => (
               <Page key={i} src={src} alt={`Page ${i + 1}`} />
@@ -159,26 +153,24 @@ export default function BrochureViewer({ isOpen, onClose }) {
           </HTMLFlipBook>
         </div>
 
-        {/* Dot strip — one dot per spread */}
+        {/* Dot strip */}
         <div style={{
           pointerEvents: 'auto',
           display: 'flex', gap: '5px', alignItems: 'center',
-          marginTop: '18px',
+          marginTop: '14px',
         }}>
-          {Array.from({ length: totalSpreads }, (_, i) => (
+          {PAGES.map((_, i) => (
             <button
               key={i}
-              onClick={() => goTo(i * 2)}
-              aria-label={`Pages ${i * 2 + 1}–${Math.min(i * 2 + 2, TOTAL)}`}
+              onClick={() => bookRef.current?.pageFlip().flip(i, 'top')}
+              aria-label={`Page ${i + 1}`}
               style={{
                 height: '5px',
-                width: spread === i ? '22px' : '5px',
+                width: i === current ? '22px' : '5px',
                 borderRadius: '3px',
-                background: spread === i
-                  ? 'linear-gradient(90deg,#1d4ed8,#06b6d4)'
-                  : 'rgba(255,255,255,0.22)',
+                background: i === current ? 'linear-gradient(90deg,#1d4ed8,#06b6d4)' : 'rgba(255,255,255,0.22)',
                 border: 'none', padding: 0,
-                cursor: spread === i ? 'default' : 'pointer',
+                cursor: i === current ? 'default' : 'pointer',
                 transition: 'all 0.28s ease',
                 flexShrink: 0,
               }}
@@ -192,29 +184,23 @@ export default function BrochureViewer({ isOpen, onClose }) {
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9992,
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         padding: '10px 14px',
-        background: 'linear-gradient(to bottom, rgba(5,8,15,0.95) 0%, transparent 100%)',
+        background: 'linear-gradient(to bottom, rgba(4,6,14,0.96), transparent)',
         pointerEvents: 'none',
       }}>
-        {/* Page counter pill */}
         <div style={{
           display: 'flex', alignItems: 'center', gap: '6px',
-          background: 'rgba(12,18,36,0.8)',
-          backdropFilter: 'blur(10px)',
-          WebkitBackdropFilter: 'blur(10px)',
+          background: 'rgba(10,15,30,0.8)',
+          backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
           border: '1px solid rgba(255,255,255,0.1)',
           borderRadius: '100px', padding: '5px 14px',
           pointerEvents: 'auto',
         }}>
-          <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-            Pages
-          </span>
+          <span style={{ color: 'rgba(255,255,255,0.38)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Page</span>
           <span style={{ color: '#06b6d4', fontSize: '12px', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>
-            {current + 1}–{Math.min(current + 2, TOTAL)}
-            <span style={{ color: 'rgba(255,255,255,0.25)' }}> / {TOTAL}</span>
+            {current + 1}<span style={{ color: 'rgba(255,255,255,0.25)' }}> / {TOTAL}</span>
           </span>
         </div>
 
-        {/* Download + close */}
         <div style={{ display: 'flex', gap: '8px', pointerEvents: 'auto' }}>
           <a
             href={PDF_URL}
@@ -233,12 +219,11 @@ export default function BrochureViewer({ isOpen, onClose }) {
           </a>
           <button
             onClick={onClose}
-            aria-label="Close brochure"
+            aria-label="Close"
             style={{
               width: '34px', height: '34px', borderRadius: '8px',
-              background: 'rgba(12,18,36,0.8)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
+              background: 'rgba(10,15,30,0.8)',
+              backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
               border: '1px solid rgba(255,255,255,0.12)',
               color: 'rgba(255,255,255,0.7)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -250,50 +235,12 @@ export default function BrochureViewer({ isOpen, onClose }) {
         </div>
       </div>
 
-      {/* Left arrow */}
-      <button
-        onClick={flipPrev}
-        aria-label="Previous pages"
-        style={{
-          position: 'fixed', left: '10px', top: '50%', transform: 'translateY(-50%)',
-          zIndex: 9992,
-          width: '40px', height: '40px', borderRadius: '50%',
-          background: 'rgba(12,18,36,0.8)',
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)',
-          border: '1px solid rgba(255,255,255,0.1)',
-          color: atStart ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.8)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          cursor: atStart ? 'default' : 'pointer',
-        }}
-      >
-        <ChevronLeft size={20} />
-      </button>
+      {/* Arrow buttons */}
+      <ArrowBtn side="left"  disabled={atStart} onClick={() => bookRef.current?.pageFlip().flipPrev('top')}><ChevronLeft  size={20} /></ArrowBtn>
+      <ArrowBtn side="right" disabled={atEnd}   onClick={() => bookRef.current?.pageFlip().flipNext('top')}><ChevronRight size={20} /></ArrowBtn>
 
-      {/* Right arrow */}
-      <button
-        onClick={flipNext}
-        aria-label="Next pages"
-        style={{
-          position: 'fixed', right: '10px', top: '50%', transform: 'translateY(-50%)',
-          zIndex: 9992,
-          width: '40px', height: '40px', borderRadius: '50%',
-          background: 'rgba(12,18,36,0.8)',
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)',
-          border: '1px solid rgba(255,255,255,0.1)',
-          color: atEnd ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.8)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          cursor: atEnd ? 'default' : 'pointer',
-        }}
-      >
-        <ChevronRight size={20} />
-      </button>
-
-      {/* Silent preload of all pages */}
-      {PAGES.map((src, i) => (
-        <img key={i} src={src} alt="" style={{ display: 'none' }} aria-hidden />
-      ))}
+      {/* Silent preload all pages */}
+      {PAGES.map((src, i) => <img key={i} src={src} alt="" style={{ display: 'none' }} aria-hidden />)}
     </>
   );
 }
