@@ -6,27 +6,23 @@ const TOTAL = 12;
 const PAGES = Array.from({ length: TOTAL }, (_, i) => `/broucher/page${i + 1}_compressed.webp`);
 const PDF_URL = '/broucher/TY-brouchere.pdf';
 
-// A4 portrait ratio — adjust if your pages differ
-const PAGE_RATIO = 1.414;
-
-function calcSize() {
-  const PAD_W = 100; // left+right margin for arrow buttons
-  const PAD_H = 120; // top bar + bottom dots
+function calcSize(ratio = 1.414) {
+  const PAD_W = 100;
+  const PAD_H = 120;
   const vw = Math.max(320, window.innerWidth  - PAD_W);
   const vh = Math.max(300, window.innerHeight - PAD_H);
 
-  // Two pages side by side in landscape book-spread view
+  // Two pages side by side
   let pageW = Math.floor(vw / 2);
-  let pageH = Math.floor(pageW * PAGE_RATIO);
+  let pageH = Math.floor(pageW * ratio);
 
   if (pageH > vh) {
     pageH = vh;
-    pageW = Math.floor(pageH / PAGE_RATIO);
+    pageW = Math.floor(pageH / ratio);
   }
 
-  // clamp
-  pageW = Math.max(140, Math.min(pageW, 600));
-  pageH = Math.max(198, Math.min(pageH, 849));
+  pageW = Math.max(140, Math.min(pageW, 620));
+  pageH = Math.max(180, Math.min(pageH, 900));
 
   return { w: pageW, h: pageH };
 }
@@ -48,7 +44,7 @@ const Page = forwardRef(({ src, alt }, ref) => (
       draggable={false}
       style={{
         width: '100%', height: '100%',
-        objectFit: 'fill',
+        objectFit: 'contain',
         display: 'block',
         pointerEvents: 'none',
       }}
@@ -57,14 +53,27 @@ const Page = forwardRef(({ src, alt }, ref) => (
 ));
 
 export default function BrochureViewer({ isOpen, onClose }) {
-  const [size,    setSize]    = useState(calcSize);
-  const [current, setCurrent] = useState(0); // leftmost visible page index
-  const bookRef = useRef(null);
+  const [size,    setSize]    = useState(() => calcSize());
+  const [current, setCurrent] = useState(0);
+  const bookRef  = useRef(null);
+  const ratioRef = useRef(1.414);
+
+  // Detect real image ratio from first page, then recalc size
+  useEffect(() => {
+    const img = new Image();
+    img.onload = () => {
+      if (img.naturalWidth && img.naturalHeight) {
+        ratioRef.current = img.naturalHeight / img.naturalWidth;
+        setSize(calcSize(ratioRef.current));
+      }
+    };
+    img.src = PAGES[0];
+  }, []);
 
   // Recalculate on resize
   useEffect(() => {
     if (!isOpen) return;
-    const onResize = () => setSize(calcSize());
+    const onResize = () => setSize(calcSize(ratioRef.current));
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, [isOpen]);
