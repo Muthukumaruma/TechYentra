@@ -17,14 +17,19 @@ import RefundPage from './pages/RefundPage';
 import AcceptableUsePage from './pages/AcceptableUsePage';
 import SLAPage from './pages/SLAPage';
 import LegalCenterPage from './pages/LegalCenterPage';
+import BrochurePage from './pages/BrochurePage';
 import './index.css';
 
 export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <Layout>
-        <Routes>
+      <Routes>
+        {/* Standalone full-screen brochure viewer — no navbar/footer */}
+        <Route path="/brochure" element={<BrochurePage />} />
+
+        {/* All other pages inside the shared Layout */}
+        <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/services" element={<ServicesPage />} />
@@ -41,8 +46,8 @@ export default function App() {
           <Route path="/acceptable-use" element={<AcceptableUsePage />} />
           <Route path="/sla" element={<SLAPage />} />
           <Route path="/legal" element={<LegalCenterPage />} />
-        </Routes>
-      </Layout>
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 }

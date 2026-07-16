@@ -18,6 +18,7 @@ const URLS = [
   `https://${HOST}/data-protection`,
   `https://${HOST}/disclosure`,
   `https://${HOST}/business-continuity`,
+  `https://${HOST}/brochure`,
 ];
 
 const ENDPOINTS = [

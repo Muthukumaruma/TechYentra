@@ -141,9 +141,9 @@ const ArrowBtn = ({ side, disabled, onClick, children }) => (
   </button>
 );
 
-export default function BrochureViewer({ isOpen, onClose }) {
+export default function BrochureViewer({ isOpen, onClose, startPage = 0 }) {
   const [size,    setSize]    = useState(() => calcSize());
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(startPage);
   const bookRef  = useRef(null);
   const ratioRef = useRef(0.63);
 
@@ -215,7 +215,7 @@ export default function BrochureViewer({ isOpen, onClose }) {
             swipeDistance={25}
             mobileScrollSupport={false}
             showCover={false}
-            startPage={0}
+            startPage={startPage}
             onFlip={(e) => setCurrent(e.data)}
             style={{ boxShadow: '0 20px 80px rgba(0,0,0,0.7), 0 4px 20px rgba(0,0,0,0.4)' }}
           >
