@@ -9,6 +9,7 @@ const LINKEDIN_URL = 'https://www.linkedin.com/company/techyenthra/';
 const FACEBOOK_URL = 'https://www.facebook.com/techyenthra';
 const YOUTUBE_URL   = 'https://www.youtube.com/@techyenthra';
 const INSTAGRAM_URL = 'https://www.instagram.com/techyenthra';
+const X_URL         = 'https://x.com/techyenthra';
 
 function LinkedInIcon({ size = 16 }) {
   return (
@@ -22,6 +23,14 @@ function FacebookIcon({ size = 16 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
       <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+    </svg>
+  );
+}
+
+function XIcon({ size = 16 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622 5.912-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
     </svg>
   );
 }
@@ -83,6 +92,7 @@ export default function Footer() {
                 { Icon: FacebookIcon, href: FACEBOOK_URL, external: true },
                 { Icon: YouTubeIcon,    href: YOUTUBE_URL,   external: true },
                 { Icon: InstagramIcon, href: INSTAGRAM_URL, external: true },
+                { Icon: XIcon,        href: X_URL,         external: true },
               ].map(({ Icon, href, external }, i) => (
                 <a
                   key={i}
