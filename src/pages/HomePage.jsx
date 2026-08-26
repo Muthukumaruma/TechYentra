@@ -197,6 +197,21 @@ export default function HomePage() {
         <div className="container">
           <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '10px 24px' }}>
 
+            {/* ISO 9001:2015 Badge */}
+            <a href={content.company.isoCertificate} target="_blank" rel="noopener noreferrer" title="ISO 9001:2015 Certificate"
+              style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(6,182,212,0.06)', border: '1px solid rgba(6,182,212,0.25)', borderRadius: '10px', padding: '9px 16px', textDecoration: 'none', transition: 'all 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(6,182,212,0.5)'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(6,182,212,0.25)'}
+            >
+              <img src={content.company.isoLogo} alt="ISO 9001:2015 Certified" style={{ width: '28px', height: '28px', objectFit: 'contain', borderRadius: '4px', flexShrink: 0 }} />
+              <div>
+                <div style={{ fontSize: '11px', fontWeight: 800, color: '#06b6d4', letterSpacing: '0.07em', lineHeight: 1.1 }}>ISO 9001:2015</div>
+                <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.04em' }}>Certified Company</div>
+              </div>
+            </a>
+
+            <div className="trust-sep" style={{ width: '1px', height: '30px', background: 'var(--border)' }} />
+
             {/* Startup India / DPIIT Badge */}
             <a href={content.company.dpiitCertificate} target="_blank" rel="noopener noreferrer" title="DPIIT Recognition Certificate"
               style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'linear-gradient(135deg,rgba(255,153,0,0.08),rgba(19,136,8,0.08))', border: '1px solid rgba(255,153,0,0.3)', borderRadius: '10px', padding: '9px 16px', textDecoration: 'none', transition: 'all 0.2s' }}
