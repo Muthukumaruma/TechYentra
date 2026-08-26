@@ -280,6 +280,13 @@
         "Panchang, muhurat & festival calendar",
         "In-app payments & astrologer earnings dashboard"
       ]
+    },
+    {
+      "id": 10,
+      "title": "Open Source LMS Platform",
+      "category": "EdTech / Open Source",
+      "description": "An open-source Learning Management System built in collaboration with cmdx.ai, offering course creation, student progress tracking, and content delivery across web and mobile.",
+      "tech": ["React.js", "React Native", "Python", "PostgreSQL"]
     }
   ],
   "contact": {
