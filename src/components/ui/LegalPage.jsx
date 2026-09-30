@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
 import { Calendar, FileText } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+import SEO from '../SEO';
 
 const ALL_CLAUSES = {
   governingLaw: {
@@ -30,8 +32,10 @@ const ALL_CLAUSES = {
 
 export default function LegalPage({ title, lastUpdated, intro, sections, clauses }) {
   const activeClauses = (clauses || []).map(key => ALL_CLAUSES[key]).filter(Boolean);
+  const { pathname } = useLocation();
   return (
     <div className="page-wrapper">
+      <SEO title={title} path={pathname} description={intro} />
       {/* Hero */}
       <section
         style={{

@@ -10,9 +10,9 @@ export default function BrochurePage() {
   return (
     <>
       <SEO
-        title="Company Profile — TechYenthra Technologies"
+        title="Company Profile Brochure"
         description="Browse TechYenthra's 12-page company profile: our story, services, technology stack, and the team behind every digital solution."
-        canonical="https://www.techyenthra.com/brochure"
+        path="/brochure"
       />
       <BrochureViewer
         isOpen

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/SEO';
 import { motion } from 'framer-motion';
 import { FileText, Shield, Cookie, RotateCcw, AlertTriangle, BarChart2, Layers, Lock, Eye } from 'lucide-react';
 
@@ -86,12 +86,11 @@ const trustItems = [
 export default function LegalCenterPage() {
   return (
     <>
-      <Helmet>
-        <title>Legal Center — TechYenthra Technologies</title>
-        <meta name="description" content="All legal documents for TechYenthra Technologies — Terms & Conditions, Privacy Policy, Refund Policy, SLA, Acceptable Use Policy, Security Practices, and more." />
-        <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://www.techyenthra.com/legal" />
-      </Helmet>
+      <SEO
+        title="Legal Center"
+        path="/legal"
+        description="All legal documents for TechYenthra Technologies — Terms & Conditions, Privacy Policy, Refund Policy, SLA, Acceptable Use Policy, Security Practices, and more."
+      />
 
       <section className="py-20 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen">
         <div className="container mx-auto px-4 max-w-6xl">
