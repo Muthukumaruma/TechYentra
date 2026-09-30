@@ -21,7 +21,7 @@ export default function ProjectsPage() {
   return (
     <div className="page-wrapper">
       <SEO
-        title="Our Projects – CodeSense, Jothisham, OTT Platform & More"
+        title="Projects – CodeSense, Jothisham, OTT & More"
         path="/projects"
         description="Portfolio of TechYenthra Technologies: CodeSense AI code reviewer, Jothisham astrology platform, OTT streaming platform, Online Travel Agent system, expense tracker, ERP and more."
         keywords="software projects portfolio India, AI code review tool, astrology platform development, OTT platform India, online travel agent software, React projects, enterprise software portfolio"

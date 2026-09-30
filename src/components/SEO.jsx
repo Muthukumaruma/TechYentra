@@ -4,10 +4,12 @@ const BASE_URL = 'https://www.techyenthra.com';
 const DEFAULT_IMAGE = `${BASE_URL}/logo-dark.png`;
 // Short brand first: people search "TechYenthra", not the full legal name.
 const SITE_NAME = 'TechYenthra';
+const SITE_NAME_LONG = 'TechYenthra Technologies';
+const MAX_TITLE = 60; // Google truncates longer titles; Bing flags them
 const DEFAULT_DESCRIPTION = 'TechYenthra Technologies Pvt Ltd – software development company in India offering AI solutions, web development, mobile apps, cloud, OTT platforms, travel tech and enterprise software.';
 
 // Search results truncate descriptions at ~155–160 characters.
-function clip(text, max = 158) {
+function clip(text, max = 150) {
   if (!text || text.length <= max) return text;
   return text.slice(0, text.lastIndexOf(' ', max - 1)).replace(/[,;:–-]$/, '') + '…';
 }
@@ -22,9 +24,11 @@ export default function SEO({
   schema = null,
   noindex = false,
 }) {
-  const fullTitle = title
-    ? `${title} | ${SITE_NAME}`
-    : 'TechYenthra | AI, Web & Mobile App Development Company in Madurai, India';
+  // Short titles get the longer brand so they aren't flagged as too short.
+  const longTitle = `${title} | ${SITE_NAME_LONG}`;
+  const fullTitle = !title
+    ? 'TechYenthra | Software & AI Development Company, Madurai'
+    : longTitle.length <= MAX_TITLE ? longTitle : `${title} | ${SITE_NAME}`;
   const canonical = `${BASE_URL}${path}`;
   const desc = clip(description);
 

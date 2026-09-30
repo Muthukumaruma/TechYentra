@@ -26,7 +26,7 @@ export default function ServicesPage() {
   return (
     <div className="page-wrapper">
       <SEO
-        title="Our Services – AI, Web, Mobile, Cloud, OTT & More"
+        title="Services – AI, Web, Mobile, Cloud & OTT"
         path="/services"
         description="Explore TechYenthra's full-spectrum IT services: AI & Machine Learning, web development, mobile apps, cloud solutions, OTT platforms, online travel agent systems, DevOps, cybersecurity and more."
         keywords="AI development services India, web development services, mobile app development India, OTT platform development, online travel agent software, cloud solutions India, DevOps services, enterprise software development"
