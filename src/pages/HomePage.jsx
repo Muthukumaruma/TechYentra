@@ -27,7 +27,7 @@ const HOME_SCHEMA = {
   url: 'https://www.techyenthra.com',
   telephone: '+918105177337',
   email: 'info@techyenthra.com',
-  address: { '@type': 'PostalAddress', addressLocality: 'Madurai', addressRegion: 'Tamil Nadu', addressCountry: 'IN' },
+  address: { '@type': 'PostalAddress', streetAddress: '3/156, ESIC Nagar, Narasingam, Othakadai', addressLocality: 'Madurai', addressRegion: 'Tamil Nadu', addressCountry: 'IN' },
   serviceType: ['AI Development', 'Web Development', 'Mobile App Development', 'Cloud Solutions', 'OTT Platform Development', 'Online Travel Agent Software'],
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
@@ -47,7 +47,7 @@ export default function HomePage() {
     <div className="page-wrapper" style={{ paddingTop: 0 }}>
       <SEO
         path="/"
-        description="TechYenthra Technologies – India's trusted software development company. We build AI platforms, web & mobile apps, OTT streaming, travel tech, and enterprise solutions. 50+ projects delivered."
+        description="TechYenthra is a software development company in Madurai, India. We build AI platforms, web & mobile apps, OTT, travel tech and enterprise software."
         keywords="software development company India, AI development Bengaluru, web development company India, mobile app development, OTT platform development, online travel agent software India, government IT services India, GeM registered software company, e-governance platform development, enterprise software company Bengaluru, SaaS product development India"
         schema={HOME_SCHEMA}
       />
@@ -94,6 +94,14 @@ export default function HomePage() {
                 marginBottom: '24px',
               }}
             >
+              {/* Brand name in the H1 so search engines tie "TechYenthra" to this site */}
+              <span style={{
+                display: 'block', fontSize: 'clamp(14px, 1.6vw, 18px)', fontWeight: 700,
+                letterSpacing: '0.18em', textTransform: 'uppercase',
+                color: 'rgba(255,255,255,0.7)', marginBottom: '16px',
+              }}>
+                TechYenthra Technologies
+              </span>
               We Engineer{' '}
               <span style={{
                 background: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',

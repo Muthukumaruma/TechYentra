@@ -2,7 +2,8 @@ import { Helmet } from 'react-helmet-async';
 
 const BASE_URL = 'https://www.techyenthra.com';
 const DEFAULT_IMAGE = `${BASE_URL}/logo-dark.png`;
-const SITE_NAME = 'TechYenthra Technologies';
+// Short brand first: people search "TechYenthra", not the full legal name.
+const SITE_NAME = 'TechYenthra';
 const DEFAULT_DESCRIPTION = 'TechYenthra Technologies Pvt Ltd – software development company in India offering AI solutions, web development, mobile apps, cloud, OTT platforms, travel tech and enterprise software.';
 
 // Search results truncate descriptions at ~155–160 characters.
@@ -23,7 +24,7 @@ export default function SEO({
 }) {
   const fullTitle = title
     ? `${title} | ${SITE_NAME}`
-    : 'TechYenthra Technologies Private Limited | AI, Web & Mobile Development India';
+    : 'TechYenthra | AI, Web & Mobile App Development Company in Madurai, India';
   const canonical = `${BASE_URL}${path}`;
   const desc = clip(description);
 
