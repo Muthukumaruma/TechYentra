@@ -27,7 +27,7 @@ const HOME_SCHEMA = {
   url: 'https://www.techyenthra.com',
   telephone: '+918105177337',
   email: 'info@techyenthra.com',
-  address: { '@type': 'PostalAddress', streetAddress: '3/156, ESIC Nagar, Narasingam, Othakadai', addressLocality: 'Madurai', addressRegion: 'Tamil Nadu', addressCountry: 'IN' },
+  address: { '@type': 'PostalAddress', streetAddress: '11, ESIC Nagar, Pillaiyarkovil Road, Mangalagudi, Narasingam', addressLocality: 'Madurai', postalCode: '625107', addressRegion: 'Tamil Nadu', addressCountry: 'IN' },
   serviceType: ['AI Development', 'Web Development', 'Mobile App Development', 'Cloud Solutions', 'OTT Platform Development', 'Online Travel Agent Software'],
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
